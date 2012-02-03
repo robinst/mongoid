@@ -45,13 +45,13 @@ describe Mongoid::MultiParameterAttributes do
       context "with an invalid DOB" do
 
         it "raises an exception" do
-          lambda {
+          expect {
             Person.new({
               "dob(1i)" => "1980",
               "dob(2i)" => "2",
               "dob(3i)" => "31"
             })
-          }.should raise_exception(
+          }.to raise_error(
             Mongoid::MultiParameterAttributes::Errors::MultiparameterAssignmentErrors,
             "1 error(s) on assignment of multiparameter attributes"
           )

@@ -6,7 +6,7 @@ describe Mongoid::NamedScope do
 
     before(:all) do
       Person.class_eval do
-        scope :doctors, {:where => {:title => 'Dr.'} }
+        scope :doctors, {where: {title: 'Dr.'} }
         scope :semiold, criteria.where(:age.gt => 50)
         scope :alki, where(:blood_alcohol_content.gt => 0.3).order_by(:blood_alcohol_content.asc)
       end
@@ -14,9 +14,9 @@ describe Mongoid::NamedScope do
 
     let!(:document) do
       Person.create(
-        :title => "Dr.",
-        :age => 65,
-        :terms => true
+        title: "Dr.",
+        age: 65,
+        terms: true
       )
     end
 
@@ -67,9 +67,9 @@ describe Mongoid::NamedScope do
     context "using order_by in a named scope" do
 
       before do
-        Person.create(:blood_alcohol_content => 0.5)
-        Person.create(:blood_alcohol_content => 0.4)
-        Person.create(:blood_alcohol_content => 0.7)
+        Person.create(blood_alcohol_content: 0.5)
+        Person.create(blood_alcohol_content: 0.4)
+        Person.create(blood_alcohol_content: 0.7)
       end
 
       let(:docs) do
@@ -85,7 +85,7 @@ describe Mongoid::NamedScope do
 
       it "is accessible" do
         Person.somebody_elses_important_class_options.should eq(
-          { :keep_me_around => true }
+          { keep_me_around: true }
         )
       end
     end
@@ -125,7 +125,7 @@ describe Mongoid::NamedScope do
 
       it "inherits the class attribute methods" do
         Doctor.somebody_elses_important_class_options.should eq(
-          { :keep_me_around => true }
+          { keep_me_around: true }
         )
       end
     end
@@ -162,11 +162,11 @@ describe Mongoid::NamedScope do
         end
 
         it "raises an error" do
-          lambda {
+          expect {
             Person.class_eval do
               scope :old, criteria.where(:age.gt => 67)
             end
-          }.should raise_error(Mongoid::Errors::ScopeOverwrite)
+          }.to raise_error(Mongoid::Errors::ScopeOverwrite)
         end
       end
     end
@@ -247,7 +247,7 @@ describe Mongoid::NamedScope do
       end
 
       it "returns a criteria with default scoping options" do
-        criteria.options.should eq({ :sort => [[ :name, :asc ]] })
+        criteria.options.should eq({ sort: [[ :name, :asc ]] })
       end
     end
 
@@ -339,7 +339,7 @@ describe Mongoid::NamedScope do
 
         it "does not modify the initial scope" do
           initial.selector.should eq(
-            { :kind => { "$in" => [ "party", "concert" ]}}
+            { kind: { "$in" => [ "party", "concert" ]}}
           )
         end
       end

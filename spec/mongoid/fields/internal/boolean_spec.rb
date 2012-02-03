@@ -3,7 +3,7 @@ require "spec_helper"
 describe Mongoid::Fields::Internal::Boolean do
 
   let(:field) do
-    described_class.instantiate(:test, :type => Boolean)
+    described_class.instantiate(:test, type: Boolean)
   end
 
   describe "#deserialize" do

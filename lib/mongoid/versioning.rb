@@ -8,17 +8,17 @@ module Mongoid #:nodoc:
     extend ActiveSupport::Concern
 
     included do
-      field :version, :type => Integer, :default => 1
+      field :version, type: Integer, default: 1
 
       embeds_many \
         :versions,
-        :class_name => self.name,
-        :validate => false,
-        :cyclic => true,
-        :inverse_of => nil,
-        :versioned => true
+        class_name: self.name,
+        validate: false,
+        cyclic: true,
+        inverse_of: nil,
+        versioned: true
 
-      set_callback :save, :before, :revise, :if => :revisable?
+      set_callback :save, :before, :revise, if: :revisable?
 
       class_attribute :version_max
       self.cyclic = true
@@ -36,17 +36,16 @@ module Mongoid #:nodoc:
     def revise
       previous = previous_revision
       if previous && versioned_attributes_changed?
-        versions.build(
-          previous.versioned_attributes, :without_protection => true
-        ).attributes.delete("_id")
+        new_version = versions.build(
+          previous.versioned_attributes, without_protection: true
+        )
+        new_version._id = nil
         if version_max.present? && versions.length > version_max
           deleted = versions.first
           if deleted.paranoid?
             versions.delete_one(deleted)
-            collection.update(
-              atomic_selector,
-              { "$pull" => { "versions" => { "version" => deleted.version }}}
-            )
+            collection.find(atomic_selector).
+              update({ "$pull" => { "versions" => { "version" => deleted.version }}})
           else
             versions.delete(deleted)
           end
@@ -64,7 +63,7 @@ module Mongoid #:nodoc:
     # @since 2.2.1
     def revise!
       versions.build(
-        (previous_revision || self).versioned_attributes, :without_protection => true
+        (previous_revision || self).versioned_attributes, without_protection: true
       )
       versions.shift if version_max.present? && versions.length > version_max
       self.version = (version || 1 ) + 1
@@ -132,8 +131,8 @@ module Mongoid #:nodoc:
     def previous_revision
       _loading_revision do
         self.class.unscoped.
-          where(:_id => id).
-          any_of({ :version => version }, { :version => nil }).first
+          where(_id: id).
+          any_of({ version: version }, { version: nil }).first
       end
     end
 

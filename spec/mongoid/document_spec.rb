@@ -97,7 +97,7 @@ describe Mongoid::Document do
     context "when comparable is a relation of this document" do
 
       let(:relation) do
-        Post.new(:person => person).person
+        Post.new(person: person).person
       end
 
       it "returns true" do
@@ -184,7 +184,7 @@ describe Mongoid::Document do
   describe "#attributes" do
 
     let(:person) do
-      Person.new(:title => "Sir")
+      Person.new(title: "Sir")
     end
 
     it "returns the attributes with indifferent access" do
@@ -298,7 +298,7 @@ describe Mongoid::Document do
   describe "#initialize" do
 
     let(:person) do
-      Person.new(:title => "Sir")
+      Person.new(title: "Sir")
     end
 
     it "sets persisted to false" do
@@ -316,7 +316,7 @@ describe Mongoid::Document do
     context "when accessing a relation from an overridden setter" do
 
       let(:doctor) do
-        Doctor.new(:specialty => "surgery")
+        Doctor.new(specialty: "surgery")
       end
 
       it "allows access to the relation" do
@@ -350,7 +350,7 @@ describe Mongoid::Document do
       context "when accessing relations" do
 
         let(:person) do
-          Person.new(:game => Game.new)
+          Person.new(game: Game.new)
         end
 
         before do
@@ -459,7 +459,7 @@ describe Mongoid::Document do
   describe "#raw_attributes" do
 
     let(:person) do
-      Person.new(:title => "Sir")
+      Person.new(title: "Sir")
     end
 
     it "returns the internal attributes" do
@@ -485,19 +485,19 @@ describe Mongoid::Document do
   describe "#as_document" do
 
     let!(:person) do
-      Person.new(:title => "Sir")
+      Person.new(title: "Sir")
     end
 
     let!(:address) do
-      person.addresses.build(:street => "Upper")
+      person.addresses.build(street: "Upper")
     end
 
     let!(:name) do
-      person.build_name(:first_name => "James")
+      person.build_name(first_name: "James")
     end
 
     let!(:location) do
-      address.locations.build(:name => "Home")
+      address.locations.build(name: "Home")
     end
 
     it "includes embeds one attributes" do
@@ -584,7 +584,9 @@ describe Mongoid::Document do
     context "when attributes are not frozen" do
       it "return false" do
         person.should_not be_frozen
-        lambda { person.title = "something" }.should_not raise_error
+        expect {
+          person.title = "something"
+        }.to_not raise_error
       end
     end
 
@@ -619,7 +621,9 @@ describe Mongoid::Document do
 
       it "keeps things frozen" do
         person.freeze
-        lambda { person.title = "something" }.should raise_error
+        expect {
+          person.title = "something"
+        }.to raise_error
       end
     end
   end
@@ -682,7 +686,7 @@ describe Mongoid::Document do
     end
 
     let(:person) do
-      Person.new(:bson_id => bson_id)
+      Person.new(bson_id: bson_id)
     end
 
     before do
@@ -720,7 +724,7 @@ describe Mongoid::Document do
       let(:model) do
         Class.new do
           include Mongoid::Document
-          store_in :anonymous
+          store_in collection: "anonymous"
           field :gender
         end
       end
@@ -735,7 +739,7 @@ describe Mongoid::Document do
 
     before(:all) do
       class Manager < Person
-        field :level, :type => Integer, :default => 1
+        field :level, type: Integer, default: 1
       end
     end
 
@@ -764,7 +768,7 @@ describe Mongoid::Document do
         end
 
         let(:obj) do
-          klass.new(:title => 'Sir')
+          klass.new(title: 'Sir')
         end
 
         let(:became) do
@@ -831,7 +835,7 @@ describe Mongoid::Document do
     context "upcasting to class with default attributes" do
 
       let(:obj) do
-        Person.new(:title => 'Sir').becomes(Manager)
+        Person.new(title: 'Sir').becomes(Manager)
       end
 
       it "applies default attributes" do

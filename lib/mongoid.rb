@@ -25,10 +25,12 @@ require "time"
 require "active_support/core_ext"
 require 'active_support/json'
 require "active_support/inflector"
-require "active_support/lazy_load_hooks"
 require "active_support/time_with_zone"
 require "active_model"
-require "mongo"
+
+require "moped"
+BSON = Moped::BSON
+
 require "mongoid/extensions"
 require "mongoid/errors"
 require "mongoid/safety"
@@ -37,13 +39,10 @@ require "mongoid/relations"
 require "mongoid/atomic"
 require "mongoid/attributes"
 require "mongoid/callbacks"
-require "mongoid/collection"
-require "mongoid/collections"
 require "mongoid/config"
-require "mongoid/contexts"
+require "mongoid/contextual"
 require "mongoid/copyable"
 require "mongoid/criteria"
-require "mongoid/cursor"
 require "mongoid/default_scope"
 require "mongoid/dirty"
 require "mongoid/extras"
@@ -67,6 +66,7 @@ require "mongoid/persistence"
 require "mongoid/reloading"
 require "mongoid/scope"
 require "mongoid/serialization"
+require "mongoid/sessions"
 require "mongoid/sharding"
 require "mongoid/state"
 require "mongoid/timestamps"
@@ -114,7 +114,6 @@ module Mongoid #:nodoc
   def configure
     block_given? ? yield(Config) : Config
   end
-  alias :config :configure
 
   # Take all the public instance methods from the Config singleton and allow
   # them to be accessed through the Mongoid module directly.
@@ -125,5 +124,5 @@ module Mongoid #:nodoc
   # @since 1.0.0
   delegate(*(Config.public_instance_methods(false) +
     ActiveModel::Observing::ClassMethods.public_instance_methods(false) <<
-    { :to => Config }))
+    { to: Config }))
 end

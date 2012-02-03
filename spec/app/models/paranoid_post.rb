@@ -6,16 +6,16 @@ class ParanoidPost
 
   max_versions 2
 
-  field :title, :type => String
+  field :title, type: String
 
   attr_accessor :after_destroy_called, :before_destroy_called
 
   belongs_to :person
 
   has_and_belongs_to_many :tags
-  has_many :authors, :dependent => :delete
+  has_many :authors, dependent: :delete
 
-  named_scope :recent, where(:created_at => { "$lt" => Time.now, "$gt" => 30.days.ago })
+  named_scope :recent, where(created_at: { "$lt" => Time.now, "$gt" => 30.days.ago })
 
   before_destroy :before_destroy_stub
   after_destroy :after_destroy_stub
@@ -30,7 +30,7 @@ class ParanoidPost
 
   class << self
     def old
-      where(:created_at => { "$lt" => 30.days.ago })
+      where(created_at: { "$lt" => 30.days.ago })
     end
   end
 end

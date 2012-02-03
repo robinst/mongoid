@@ -4,6 +4,18 @@ describe Mongoid::Callbacks do
 
   class TestClass
     include Mongoid::Callbacks
+
+    attr_reader :before_save_called, :after_save_called
+
+    before_save do |object|
+      p "before save"
+      @before_save_called = true
+    end
+
+    after_save do |object|
+      p "after save"
+      @after_save_called = true
+    end
   end
 
   describe ".included" do
@@ -75,7 +87,7 @@ describe Mongoid::Callbacks do
   describe ".after_build" do
 
     let(:weapon) do
-      Player.new(:frags => 5).weapons.build
+      Player.new(frags: 5).weapons.build
     end
 
     it "runs after document build (references_many)" do
@@ -83,7 +95,7 @@ describe Mongoid::Callbacks do
     end
 
     let(:implant) do
-      Player.new(:frags => 5).implants.build
+      Player.new(frags: 5).implants.build
     end
 
     it "runs after document build (embeds_many)" do
@@ -91,7 +103,7 @@ describe Mongoid::Callbacks do
     end
 
     let(:powerup) do
-      Player.new(:frags => 5).build_powerup
+      Player.new(frags: 5).build_powerup
     end
 
     it "runs after document build (references_one)" do
@@ -99,7 +111,7 @@ describe Mongoid::Callbacks do
     end
 
     let(:augmentation) do
-      Player.new(:frags => 5).build_augmentation
+      Player.new(frags: 5).build_augmentation
     end
 
     it "runs after document build (embeds_one)" do
@@ -110,7 +122,7 @@ describe Mongoid::Callbacks do
   describe ".before_create" do
 
     let(:artist) do
-      Artist.new(:name => "Depeche Mode")
+      Artist.new(name: "Depeche Mode")
     end
 
     context "callback returns true" do
@@ -143,7 +155,7 @@ describe Mongoid::Callbacks do
     context "when creating" do
 
       let(:artist) do
-        Artist.new(:name => "Depeche Mode")
+        Artist.new(name: "Depeche Mode")
       end
 
       after do
@@ -176,7 +188,7 @@ describe Mongoid::Callbacks do
     context "when updating" do
 
       let(:artist) do
-        Artist.create(:name => "Depeche Mode").tap do |artist|
+        Artist.create(name: "Depeche Mode").tap do |artist|
           artist.name = "The Mountain Goats"
         end
       end
@@ -212,7 +224,7 @@ describe Mongoid::Callbacks do
   describe ".before_destroy" do
 
     let(:artist) do
-      Artist.create(:name => "Depeche Mode")
+      Artist.create(name: "Depeche Mode")
     end
 
     before do
@@ -246,6 +258,44 @@ describe Mongoid::Callbacks do
     end
   end
 
+  describe "#run_after_callbacks" do
+
+    let(:object) do
+      TestClass.new
+    end
+
+    before do
+      object.run_after_callbacks(:save)
+    end
+
+    it "runs the after callbacks" do
+      object.after_save_called.should be_true
+    end
+
+    it "does not run the before callbacks" do
+      object.before_save_called.should be_false
+    end
+  end
+
+  describe "#run_before_callbacks" do
+
+    let(:object) do
+      TestClass.new
+    end
+
+    before do
+      object.run_before_callbacks(:save)
+    end
+
+    it "runs the before callbacks" do
+      object.before_save_called.should be_true
+    end
+
+    it "does not run the after callbacks" do
+      object.after_save_called.should be_false
+    end
+  end
+
   context "when cascading callbacks" do
 
     context "when the documents are embedded one level" do
@@ -257,11 +307,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -276,11 +326,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -296,11 +346,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:label) do
-            band.create_label(:name => "Mute")
+            band.create_label(name: "Mute")
           end
 
           before do
@@ -321,11 +371,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -340,11 +390,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -360,11 +410,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:label) do
-            band.create_label(:name => "Mute")
+            band.create_label(name: "Mute")
           end
 
           before do
@@ -384,11 +434,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -403,11 +453,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -423,13 +473,13 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           context "when the child is dirty" do
 
             let!(:label) do
-              band.create_label(:name => "Mute")
+              band.create_label(name: "Mute")
             end
 
             before do
@@ -445,7 +495,7 @@ describe Mongoid::Callbacks do
           context "when the child is not dirty" do
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -466,11 +516,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -485,11 +535,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:label) do
-              band.build_label(:name => "Mute")
+              band.build_label(name: "Mute")
             end
 
             before do
@@ -505,11 +555,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:label) do
-            band.create_label(:name => "Mute")
+            band.create_label(name: "Mute")
           end
 
           before do
@@ -529,11 +579,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -548,11 +598,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -568,11 +618,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           before do
@@ -593,11 +643,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -616,11 +666,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -640,11 +690,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           before do
@@ -668,11 +718,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -687,11 +737,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -707,11 +757,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           context "when the child is dirty" do
@@ -750,11 +800,11 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -773,11 +823,11 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             before do
@@ -797,11 +847,11 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           before do
@@ -828,15 +878,15 @@ describe Mongoid::Callbacks do
           context "when the root is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -851,15 +901,15 @@ describe Mongoid::Callbacks do
           context "when the root is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -875,15 +925,15 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           let!(:track) do
-            record.tracks.create(:name => "Berlin")
+            record.tracks.create(name: "Berlin")
           end
 
           before do
@@ -904,15 +954,15 @@ describe Mongoid::Callbacks do
           context "when the root is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -935,15 +985,15 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -967,15 +1017,15 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           let!(:track) do
-            record.tracks.create(:name => "Berlin")
+            record.tracks.create(name: "Berlin")
           end
 
           before do
@@ -1003,15 +1053,15 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -1026,15 +1076,15 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -1050,15 +1100,15 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           let!(:track) do
-            record.tracks.create(:name => "Berlin")
+            record.tracks.create(name: "Berlin")
           end
 
           context "when the child is dirty" do
@@ -1101,15 +1151,15 @@ describe Mongoid::Callbacks do
           context "when the parent is new" do
 
             let(:band) do
-              Band.new(:name => "Moderat")
+              Band.new(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -1124,15 +1174,15 @@ describe Mongoid::Callbacks do
           context "when the parent is persisted" do
 
             let(:band) do
-              Band.create(:name => "Moderat")
+              Band.create(name: "Moderat")
             end
 
             let!(:record) do
-              band.records.build(:name => "Moderat")
+              band.records.build(name: "Moderat")
             end
 
             let!(:track) do
-              record.tracks.build(:name => "Berlin")
+              record.tracks.build(name: "Berlin")
             end
 
             before do
@@ -1148,15 +1198,15 @@ describe Mongoid::Callbacks do
         context "when the child is persisted" do
 
           let(:band) do
-            Band.create(:name => "Moderat")
+            Band.create(name: "Moderat")
           end
 
           let!(:record) do
-            band.records.create(:name => "Moderat")
+            band.records.create(name: "Moderat")
           end
 
           let!(:track) do
-            record.tracks.create(:name => "Berlin")
+            record.tracks.create(name: "Berlin")
           end
 
           before do
@@ -1191,7 +1241,7 @@ describe Mongoid::Callbacks do
     end
 
     it "does not duplicate the child documents" do
-      parent.child_docs.create(:position => 1)
+      parent.child_docs.create(position: 1)
       ParentDoc.find(parent.id).child_docs.size.should eq(1)
     end
   end
@@ -1199,13 +1249,13 @@ describe Mongoid::Callbacks do
   context "when callbacks cancel persistence" do
 
     let(:address) do
-      Address.new(:street => "123 Sesame")
+      Address.new(street: "123 Sesame")
     end
 
     context "when creating a document" do
 
       let(:person) do
-        Person.new(:mode => :prevent_save, :title => "Associate", :addresses => [ address ])
+        Person.new(mode: :prevent_save, title: "Associate", addresses: [ address ])
       end
 
       it "fails to save" do
@@ -1235,9 +1285,9 @@ describe Mongoid::Callbacks do
       let(:person) do
         Person.create.tap do |person|
           person.attributes = {
-            :mode => :prevent_save,
-            :title => "Associate",
-            :addresses => [ address ]
+            mode: :prevent_save,
+            title: "Associate",
+            addresses: [ address ]
           }
         end
       end

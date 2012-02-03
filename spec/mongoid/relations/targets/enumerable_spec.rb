@@ -11,13 +11,13 @@ describe Mongoid::Relations::Targets::Enumerable do
       end
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       context "when only a criteria target exists" do
 
         let(:criteria) do
-          Post.where(:person_id => person.id)
+          Post.where(person_id: person.id)
         end
 
         let!(:enumerable) do
@@ -43,7 +43,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when a criteria and added exist" do
 
         let(:criteria) do
-          Post.where(:person_id => person.id)
+          Post.where(person_id: person.id)
         end
 
         let(:enumerable) do
@@ -116,7 +116,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let!(:enumerable) do
@@ -146,17 +146,17 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post_one) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let!(:post_two) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     context "when only a criteria target exists" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -203,15 +203,15 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let!(:post_two) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let(:enumerable) do
@@ -249,15 +249,15 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:title => "one", :person_id => person.id)
+      Post.create(title: "one", person_id: person.id)
     end
 
     let!(:post_two) do
-      Post.create(:title => "two", :person_id => person.id)
+      Post.create(title: "two", person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let(:enumerable) do
@@ -291,7 +291,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the document is loaded" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -318,7 +318,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       end
 
       let(:criteria) do
-        Person.where(:person_id => person.id)
+        Person.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -345,11 +345,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the document is unloaded" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -372,11 +372,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the document is not found" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let(:criteria) do
-        Person.where(:person_id => person.id)
+        Person.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -404,7 +404,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the document is loaded" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -431,7 +431,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       end
 
       let(:criteria) do
-        Person.where(:person_id => person.id)
+        Person.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -458,11 +458,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the document is unloaded" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -485,11 +485,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the block doesn't match" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       let(:criteria) do
-        Person.where(:person_id => person.id)
+        Person.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -513,13 +513,13 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     context "when only a criteria target exists" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -565,7 +565,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when a criteria and added exist" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -631,7 +631,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:enumerable) do
@@ -641,7 +641,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the added contains a persisted document" do
 
       let!(:post) do
-        Post.create(:person_id => person.id)
+        Post.create(person_id: person.id)
       end
 
       before do
@@ -667,7 +667,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the enumerable is not loaded" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let(:enumerable) do
@@ -679,7 +679,7 @@ describe Mongoid::Relations::Targets::Enumerable do
         context "when added is empty" do
 
           let!(:post) do
-            Post.create(:person_id => person.id)
+            Post.create(person_id: person.id)
           end
 
           let(:first) do
@@ -698,11 +698,11 @@ describe Mongoid::Relations::Targets::Enumerable do
         context "when added is not empty" do
 
           let!(:post) do
-            Post.create(:person_id => person.id)
+            Post.create(person_id: person.id)
           end
 
           let(:post_two) do
-            Post.new(:person_id => person.id)
+            Post.new(person_id: person.id)
           end
 
           before do
@@ -726,7 +726,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when unloaded is empty" do
 
         let!(:post) do
-          Post.new(:person_id => person.id)
+          Post.new(person_id: person.id)
         end
 
         before do
@@ -767,7 +767,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when loaded is not empty" do
 
         let!(:post) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         let(:enumerable) do
@@ -786,7 +786,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when loaded is empty" do
 
         let!(:post) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         let(:enumerable) do
@@ -830,17 +830,17 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post_one) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let!(:post_two) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     context "when the document is present and not the first" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let!(:enumerable) do
@@ -889,7 +889,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when provided with a criteria" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let(:enumerable) do
@@ -961,15 +961,15 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the enumerable is not loaded" do
 
       let(:post) do
-        Post.new(:person_id => person.id)
+        Post.new(person_id: person.id)
       end
 
       let(:enumerable) do
-        described_class.new(Post.where(:person_id => person.id))
+        described_class.new(Post.where(person_id: person.id))
       end
 
       let(:post_two) do
-        Post.new(:person_id => person.id)
+        Post.new(person_id: person.id)
       end
 
       before do
@@ -988,11 +988,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when passed a block" do
 
       let(:enumerable) do
-        described_class.new(Post.where(:person_id => person.id))
+        described_class.new(Post.where(person_id: person.id))
       end
 
       let(:post_two) do
-        Post.new(:person_id => person.id)
+        Post.new(person_id: person.id)
       end
 
       before do
@@ -1037,7 +1037,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the enumerable is not loaded" do
 
       let(:criteria) do
-        Post.where(:person_id => person.id)
+        Post.where(person_id: person.id)
       end
 
       let(:enumerable) do
@@ -1047,7 +1047,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when unloaded is not empty" do
 
         let!(:post) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         let(:last) do
@@ -1066,7 +1066,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when unloaded is empty" do
 
         let!(:post) do
-          Post.new(:person_id => person.id)
+          Post.new(person_id: person.id)
         end
 
         before do
@@ -1107,7 +1107,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when loaded is not empty" do
 
         let!(:post) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         let(:enumerable) do
@@ -1126,7 +1126,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when loaded is empty" do
 
         let!(:post) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         let(:enumerable) do
@@ -1191,11 +1191,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:enumerable) do
@@ -1226,11 +1226,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let(:post_two) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let(:enumerable) do
@@ -1282,7 +1282,7 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     context "when the enumerable is loaded" do
@@ -1292,7 +1292,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       end
 
       let(:post_two) do
-        Post.new(:person_id => person.id)
+        Post.new(person_id: person.id)
       end
 
       before do
@@ -1315,13 +1315,13 @@ describe Mongoid::Relations::Targets::Enumerable do
     context "when the enumerable is not loaded" do
 
       let(:enumerable) do
-        described_class.new(Post.where(:person_id => person.id))
+        described_class.new(Post.where(person_id: person.id))
       end
 
       context "when the added contains new documents" do
 
         let(:post_two) do
-          Post.new(:person_id => person.id)
+          Post.new(person_id: person.id)
         end
 
         before do
@@ -1340,7 +1340,7 @@ describe Mongoid::Relations::Targets::Enumerable do
       context "when the added contains persisted documents" do
 
         let(:post_two) do
-          Post.create(:person_id => person.id)
+          Post.create(person_id: person.id)
         end
 
         before do
@@ -1365,11 +1365,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:title => "test", :person_id => person.id)
+      Post.create(title: "test", person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:enumerable) do
@@ -1396,15 +1396,15 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:title => "test", :person_id => person.id)
+      Post.create(title: "test", person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:json) do
-      person.posts.to_json({:except => 'title'})
+      person.posts.to_json({except: 'title'})
     end
 
     it "serializes the enumerable" do
@@ -1419,11 +1419,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:title => "test", :person_id => person.id)
+      Post.create(title: "test", person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:enumerable) do
@@ -1451,15 +1451,15 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:title => "test", :person_id => person.id)
+      Post.create(title: "test", person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:json) do
-      person.posts.as_json({:except => 'title'})
+      person.posts.as_json({except: 'title'})
     end
 
     it "serializes the enumerable" do
@@ -1475,11 +1475,11 @@ describe Mongoid::Relations::Targets::Enumerable do
     end
 
     let!(:post) do
-      Post.create(:person_id => person.id)
+      Post.create(person_id: person.id)
     end
 
     let(:criteria) do
-      Post.where(:person_id => person.id)
+      Post.where(person_id: person.id)
     end
 
     let!(:enumerable) do

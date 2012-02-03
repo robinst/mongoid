@@ -9,32 +9,32 @@ describe Mongoid::Criterion::Inclusion do
   describe "#all" do
 
     let(:criteria) do
-      base.all(:title => ["title1", "title2"])
+      base.all(title: ["title1", "title2"])
     end
 
     it "adds the $all query to the selector" do
       criteria.selector.should eq(
-        { :title => { "$all" => ["title1", "title2"] }}
+        { title: { "$all" => ["title1", "title2"] }}
       )
     end
 
     it "returns a copy" do
-      criteria.all(:title => [ "title1" ]).should_not eql(criteria)
+      criteria.all(title: [ "title1" ]).should_not eql(criteria)
     end
 
     context "when all criteria exists" do
 
       let(:criteria) do
         base.
-          all(:title => ["title1", "title2"]).
-          all(:title => ["title3"], :another => ["value"])
+          all(title: ["title1", "title2"]).
+          all(title: ["title3"], another: ["value"])
       end
 
       it "appends to the existing criteria" do
         criteria.selector.should eq(
           {
-            :title => { "$all" => [ "title1", "title2", "title3" ] },
-            :another => { "$all" => [ "value" ] }
+            title: { "$all" => [ "title1", "title2", "title3" ] },
+            another: { "$all" => [ "value" ] }
           }
         )
       end
@@ -50,7 +50,7 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let(:from_db) do
-        Person.all_in(:_id => [ person.id.to_s ])
+        Person.all_in(_id: [ person.id.to_s ])
       end
 
       it "returns the matching documents" do
@@ -64,14 +64,14 @@ describe Mongoid::Criterion::Inclusion do
     context "when provided a hash" do
 
       let(:criteria) do
-        base.and(:title => "Title", :text => "Text")
+        base.and(title: "Title", text: "Text")
       end
 
       it "adds the clause to the selector" do
         criteria.selector.should eq(
           {
-            :title => "Title",
-            :text => "Text"
+            title: "Title",
+            text: "Text"
           }
         )
       end
@@ -104,23 +104,23 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let(:criteria) do
-        Video.any_in(:release_dates => [ time ])
+        Video.any_in(release_dates: [ time ])
       end
 
       it "converts the selector properly" do
-        criteria.selector.should eq({ :release_dates => { "$in" => [ time ] }})
+        criteria.selector.should eq({ release_dates: { "$in" => [ time ] }})
       end
     end
 
     context "when providing multiple fields" do
 
       let(:criteria) do
-        base.any_in(:title => ["title1", "title2"], :text => ["test"])
+        base.any_in(title: ["title1", "title2"], text: ["test"])
       end
 
       it "aliases to #in" do
         criteria.selector.should eq({
-          :title => { "$in" => ["title1", "title2"] }, :text => { "$in" => ["test"] }
+          title: { "$in" => ["title1", "title2"] }, text: { "$in" => ["test"] }
         })
       end
     end
@@ -129,13 +129,13 @@ describe Mongoid::Criterion::Inclusion do
 
       let(:criteria) do
         base.
-          any_in(:title => [ "test", "test2" ]).
-          any_in(:title => [ "test2", "test3" ])
+          any_in(title: [ "test", "test2" ]).
+          any_in(title: [ "test2", "test3" ])
       end
 
       it "intersects the selector" do
         criteria.selector.should eq({
-          :title => { "$in" => [ "test2" ] }
+          title: { "$in" => [ "test2" ] }
         })
       end
     end
@@ -163,15 +163,15 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:person) do
-          Person.safely.create!(:ssn => "123-11-1111")
+          Person.safely.create!(ssn: "123-11-1111")
         end
 
         let!(:account) do
-          person.safely.create_account(:name => "test")
+          person.safely.create_account(name: "test")
         end
 
         let(:from_db) do
-          Account.any_in(:person_id => [ person.id ])
+          Account.any_in(person_id: [ person.id ])
         end
 
         it "returns the correct results" do
@@ -183,15 +183,15 @@ describe Mongoid::Criterion::Inclusion do
     context "when chaining after a where" do
 
       let!(:person) do
-        Person.create(:title => "sir")
+        Person.create(title: "sir")
       end
 
       let(:criteria) do
-        Person.where(:title => "sir")
+        Person.where(title: "sir")
       end
 
       let(:from_db) do
-        criteria.any_in(:title => [ "sir", "madam" ])
+        criteria.any_in(title: [ "sir", "madam" ])
       end
 
       it "returns the correct documents" do
@@ -199,20 +199,20 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       it "contains the overridden selector" do
-        from_db.selector.should eq({ :title => { "$in" => [ "sir", "madam" ] } })
+        from_db.selector.should eq({ title: { "$in" => [ "sir", "madam" ] } })
       end
     end
 
     context "when the field value is nil" do
 
       let!(:person) do
-        Person.create(:title => nil)
+        Person.create(title: nil)
       end
 
       context "when searching for any value" do
 
         let(:from_db) do
-          Person.any_in(:title => [ true, false, nil ])
+          Person.any_in(title: [ true, false, nil ])
         end
 
         it "returns the matching documents" do
@@ -224,13 +224,13 @@ describe Mongoid::Criterion::Inclusion do
     context "when the field value is false" do
 
       let!(:person) do
-        Person.create(:terms => false)
+        Person.create(terms: false)
       end
 
       context "when searching for any value" do
 
         let(:from_db) do
-          Person.any_in(:terms => [ true, false, nil ])
+          Person.any_in(terms: [ true, false, nil ])
         end
 
         it "returns the matching documents" do
@@ -246,7 +246,7 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let(:from_db) do
-        Person.any_in(:_id => [ person.id.to_s ])
+        Person.any_in(_id: [ person.id.to_s ])
       end
 
       it "returns the matching documents" do
@@ -258,15 +258,15 @@ describe Mongoid::Criterion::Inclusion do
   describe "#any_of" do
 
     let!(:person_one) do
-      Person.create(:title => "Sir", :age => 5)
+      Person.create(title: "Sir", age: 5)
     end
 
     let!(:person_two) do
-      Person.create(:title => "Sir", :age => 7)
+      Person.create(title: "Sir", age: 7)
     end
 
     let!(:person_three) do
-      Person.create(:title => "Madam", :age => 1)
+      Person.create(title: "Madam", age: 1)
     end
 
     context "when provided a hash" do
@@ -274,12 +274,12 @@ describe Mongoid::Criterion::Inclusion do
       context "on different fields" do
 
         let(:criteria) do
-          base.any_of({ :field1 => "test" }, { :field2 => "testy" })
+          base.any_of({ field1: "test" }, { field2: "testy" })
         end
 
         it "adds the $or criteria to the selector" do
           criteria.selector.should eq(
-            { "$or" => [ { :field1 => "test" }, { :field2 => "testy" } ] }
+            { "$or" => [ { field1: "test" }, { field2: "testy" } ] }
           )
         end
       end
@@ -287,12 +287,12 @@ describe Mongoid::Criterion::Inclusion do
       context "on the same fields" do
 
         let(:criteria) do
-          base.any_of({:field1 => "test" }, { :field1.lt => "testy" })
+          base.any_of({field1: "test" }, { :field1.lt => "testy" })
         end
 
         it "adds the $or criteria to the selector" do
           criteria.selector.should eq(
-            { "$or" => [ { :field1 => "test" }, { :field1 => { "$lt" => "testy" } } ] }
+            { "$or" => [ { field1: "test" }, { field1: { "$lt" => "testy" } } ] }
           )
         end
       end
@@ -300,12 +300,12 @@ describe Mongoid::Criterion::Inclusion do
       context "when supplying an array" do
 
         let(:criteria) do
-          base.any_of([{:field1 => "test" }, { :field1.lt => "testy" }])
+          base.any_of([{field1: "test" }, { :field1.lt => "testy" }])
         end
 
         it "adds the $or criteria to the selector" do
           criteria.selector.should eq(
-            { "$or" => [ { :field1 => "test" }, { :field1 => { "$lt" => "testy" } } ] }
+            { "$or" => [ { field1: "test" }, { field1: { "$lt" => "testy" } } ] }
           )
         end
       end
@@ -314,7 +314,7 @@ describe Mongoid::Criterion::Inclusion do
     context "with a single match" do
 
       let(:from_db) do
-        Person.where(:title => "Madam").any_of(:age => 1)
+        Person.where(title: "Madam").any_of(age: 1)
       end
 
       it "returns any matching documents" do
@@ -325,7 +325,7 @@ describe Mongoid::Criterion::Inclusion do
     context "when chaining for multiple matches" do
 
       let(:from_db) do
-        Person.any_of({ :age => 7 }, { :age.lt => 3 })
+        Person.any_of({ age: 7 }, { :age.lt => 3 })
       end
 
       it "returns any matching documents" do
@@ -339,8 +339,8 @@ describe Mongoid::Criterion::Inclusion do
 
         let(:from_db) do
           Person.any_of(
-            { :_id => person_one.id.to_s },
-            { :_id => person_two.id.to_s }
+            { _id: person_one.id.to_s },
+            { _id: person_two.id.to_s }
           )
         end
 
@@ -366,7 +366,7 @@ describe Mongoid::Criterion::Inclusion do
       let!(:from_db) do
         Person.all_of(
           { :_id.in => [ person_one.id, person_two.id ] },
-          { :_id => person_two.id }
+          { _id: person_two.id }
         )
       end
 
@@ -380,7 +380,7 @@ describe Mongoid::Criterion::Inclusion do
       let!(:from_db) do
         Person.all_of(
           { :_id.in => [ person_one.id.to_s, person_two.id.to_s ] },
-          { :_id => person_two.id.to_s }
+          { _id: person_two.id.to_s }
         )
       end
 
@@ -412,34 +412,34 @@ describe Mongoid::Criterion::Inclusion do
   describe "#also_in" do
 
     let(:criteria) do
-      base.also_in(:title => ["title1", "title2"], :text => ["test"])
+      base.also_in(title: ["title1", "title2"], text: ["test"])
     end
 
     it "adds the $in clause to the selector" do
       criteria.selector.should eq(
         {
-          :title => { "$in" => ["title1", "title2"] }, :text => { "$in" => ["test"] }
+          title: { "$in" => ["title1", "title2"] }, text: { "$in" => ["test"] }
         }
       )
     end
 
     it "returns a copy" do
-      criteria.also_in(:title => ["title1"]).should_not eql(criteria)
+      criteria.also_in(title: ["title1"]).should_not eql(criteria)
     end
 
     context "when existing in criteria exists" do
 
       let(:criteria) do
         base.
-          in(:title => ["title1", "title2"]).
-          also_in(:title => ["title3"], :text => ["test"])
+          in(title: ["title1", "title2"]).
+          also_in(title: ["title3"], text: ["test"])
       end
 
       it "appends to the existing criteria" do
         criteria.selector.should eq(
           {
-            :title => {
-              "$in" => ["title1", "title2", "title3"] }, :text => { "$in" => ["test"]
+            title: {
+              "$in" => ["title1", "title2", "title3"] }, text: { "$in" => ["test"]
             }
           }
         )
@@ -450,7 +450,7 @@ describe Mongoid::Criterion::Inclusion do
   describe "#find" do
 
     let!(:person) do
-      Person.create(:title => "Sir")
+      Person.create(title: "Sir")
     end
 
     context "when finding by an id" do
@@ -460,7 +460,7 @@ describe Mongoid::Criterion::Inclusion do
         context "when the additional criteria matches" do
 
           let!(:from_db) do
-            Person.where(:title => "Sir").find(person.id)
+            Person.where(title: "Sir").find(person.id)
           end
 
           it "returns the matching document" do
@@ -471,7 +471,7 @@ describe Mongoid::Criterion::Inclusion do
         context "when the additional criteria does not match" do
 
           let(:from_db) do
-            Person.where(:title => "Madam").find(person.id)
+            Person.where(title: "Madam").find(person.id)
           end
 
           it "raises a not found error" do
@@ -486,7 +486,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "raises an error" do
             expect {
-              Person.where(:title => "Sir").find(BSON::ObjectId.new)
+              Person.where(title: "Sir").find(BSON::ObjectId.new)
             }.to raise_error(Mongoid::Errors::DocumentNotFound)
           end
         end
@@ -502,7 +502,7 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           let!(:from_db) do
-            Person.where(:title => "Sir").find(BSON::ObjectId.new)
+            Person.where(title: "Sir").find(BSON::ObjectId.new)
           end
 
           it "returns nil" do
@@ -517,15 +517,15 @@ describe Mongoid::Criterion::Inclusion do
       context "when ids are not object ids" do
 
         let!(:jar_one) do
-          Jar.create(:_id => 114869287646134350)
+          Jar.create(_id: 114869287646134350)
         end
 
         let!(:jar_two) do
-          Jar.create(:_id => 114869287646134388)
+          Jar.create(_id: 114869287646134388)
         end
 
         let!(:jar_three) do
-          Jar.create(:_id => 114869287646134398)
+          Jar.create(_id: 114869287646134398)
         end
 
         context "when the documents are found" do
@@ -543,7 +543,7 @@ describe Mongoid::Criterion::Inclusion do
       context "when the id is found" do
 
         let!(:from_db) do
-          Person.where(:title => "Sir").find([ person.id ])
+          Person.where(title: "Sir").find([ person.id ])
         end
 
         it "returns the matching document" do
@@ -557,7 +557,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "raises an error" do
             expect {
-              Person.where(:title => "Sir").find([ BSON::ObjectId.new ])
+              Person.where(title: "Sir").find([ BSON::ObjectId.new ])
             }.to raise_error(Mongoid::Errors::DocumentNotFound)
           end
         end
@@ -573,7 +573,7 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           let!(:from_db) do
-            Person.where(:title => "Sir").find([ BSON::ObjectId.new ])
+            Person.where(title: "Sir").find([ BSON::ObjectId.new ])
           end
 
           it "returns an empty array" do
@@ -587,34 +587,34 @@ describe Mongoid::Criterion::Inclusion do
   describe "#in" do
 
     let(:criteria) do
-      base.in(:title => ["title1", "title2"], :text => ["test"], :ssn => [nil, "1"])
+      base.in(title: ["title1", "title2"], text: ["test"], ssn: [nil, "1"])
     end
 
     it "adds the $in clause to the selector" do
       criteria.selector.should eq(
         {
-          :title => { "$in" => ["title1", "title2"] }, :text => { "$in" => ["test"] }, :ssn => { "$in" => [nil, "1"] }
+          title: { "$in" => ["title1", "title2"] }, text: { "$in" => ["test"] }, ssn: { "$in" => [nil, "1"] }
         }
       )
     end
 
     it "returns a copy" do
-      criteria.in(:title => ["title1"]).should_not eql(criteria)
+      criteria.in(title: ["title1"]).should_not eql(criteria)
     end
 
     context "when existing in criteria exists" do
 
       let(:criteria) do
         base.
-          in(:title => ["title1", "title2"]).
-          in(:title => ["title2", "title3"], :text => ["test"])
+          in(title: ["title1", "title2"]).
+          in(title: ["title2", "title3"], text: ["test"])
       end
 
       it "intersects the existing criteria" do
         criteria.selector.should eq(
           {
-            :title => {
-              "$in" => ["title2"] }, :text => { "$in" => ["test"]
+            title: {
+              "$in" => ["title2"] }, text: { "$in" => ["test"]
             }
           }
         )
@@ -647,11 +647,11 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let!(:post_one) do
-        person.posts.create(:title => "one")
+        person.posts.create(title: "one")
       end
 
       let!(:post_two) do
-        person.posts.create(:title => "two")
+        person.posts.create(title: "two")
       end
 
       context "when the criteria has no options" do
@@ -730,7 +730,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:post_three) do
-          person_two.posts.create(:title => "three")
+          person_two.posts.create(title: "three")
         end
 
         before do
@@ -762,11 +762,11 @@ describe Mongoid::Criterion::Inclusion do
     context "when including a has and belongs to many" do
 
       let!(:preference_one) do
-        person.preferences.create(:name => "one")
+        person.preferences.create(name: "one")
       end
 
       let!(:preference_two) do
-        person.preferences.create(:name => "two")
+        person.preferences.create(name: "two")
       end
 
       context "when the criteria has no options" do
@@ -857,7 +857,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:preference_three) do
-          person_two.preferences.create(:name => "three")
+          person_two.preferences.create(name: "three")
         end
 
         before do
@@ -893,11 +893,11 @@ describe Mongoid::Criterion::Inclusion do
     context "when including a has many" do
 
       let!(:post_one) do
-        person.posts.create(:title => "one")
+        person.posts.create(title: "one")
       end
 
       let!(:post_two) do
-        person.posts.create(:title => "two")
+        person.posts.create(title: "two")
       end
 
       context "when the criteria has no options" do
@@ -976,7 +976,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:post_three) do
-          person_two.posts.create(:title => "three")
+          person_two.posts.create(title: "three")
         end
 
         before do
@@ -1008,11 +1008,11 @@ describe Mongoid::Criterion::Inclusion do
     context "when including a has one" do
 
       let!(:game_one) do
-        person.create_game(:name => "one")
+        person.create_game(name: "one")
       end
 
       let!(:game_two) do
-        person.create_game(:name => "two")
+        person.create_game(name: "two")
       end
 
       context "when the criteria has no options" do
@@ -1060,7 +1060,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:game_three) do
-          person_two.create_game(:name => "Skyrim")
+          person_two.create_game(name: "Skyrim")
         end
 
         before do
@@ -1092,11 +1092,11 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let!(:game_one) do
-        person.create_game(:name => "one")
+        person.create_game(name: "one")
       end
 
       let!(:game_two) do
-        person_two.create_game(:name => "two")
+        person_two.create_game(name: "two")
       end
 
       before do
@@ -1145,19 +1145,19 @@ describe Mongoid::Criterion::Inclusion do
     context "when including multiples in the same criteria" do
 
       let!(:post_one) do
-        person.posts.create(:title => "one")
+        person.posts.create(title: "one")
       end
 
       let!(:post_two) do
-        person.posts.create(:title => "two")
+        person.posts.create(title: "two")
       end
 
       let!(:game_one) do
-        person.create_game(:name => "one")
+        person.create_game(name: "one")
       end
 
       let!(:game_two) do
-        person.create_game(:name => "two")
+        person.create_game(name: "two")
       end
 
       before do
@@ -1193,23 +1193,23 @@ describe Mongoid::Criterion::Inclusion do
   describe "#near" do
 
     let!(:berlin) do
-      Bar.create(:location => [ 52.30, 13.25 ])
+      Bar.create(location: [ 52.30, 13.25 ])
     end
 
     let!(:prague) do
-      Bar.create(:location => [ 50.5, 14.26 ])
+      Bar.create(location: [ 50.5, 14.26 ])
     end
 
     let!(:paris) do
-      Bar.create(:location => [ 48.48, 2.20 ])
+      Bar.create(location: [ 48.48, 2.20 ])
     end
 
     let(:bars) do
-      Bar.near(:location => [ 41.23, 2.9 ])
+      Bar.near(location: [ 41.23, 2.9 ])
     end
 
     let(:criteria) do
-      base.near(:field => [ 72, -44 ])
+      base.near(field: [ 72, -44 ])
     end
 
     before do
@@ -1218,7 +1218,7 @@ describe Mongoid::Criterion::Inclusion do
 
     it "adds the $near modifier to the selector" do
       criteria.selector.should eq(
-        { :field => { "$near" => [ 72, -44 ] } }
+        { field: { "$near" => [ 72, -44 ] } }
       )
     end
 
@@ -1239,23 +1239,23 @@ describe Mongoid::Criterion::Inclusion do
 
     let!(:person) do
       Person.create(
-        :title => "Sir",
-        :dob => dob,
-        :lunch_time => lunch_time,
-        :age => 33,
-        :aliases => [ "D", "Durran" ],
-        :things => [ { :phone => 'HTC Incredible' } ]
+        title: "Sir",
+        dob: dob,
+        lunch_time: lunch_time,
+        age: 33,
+        aliases: [ "D", "Durran" ],
+        things: [ { phone: 'HTC Incredible' } ]
       )
     end
 
     context "when passing in a range" do
 
       let!(:baby) do
-        Person.create(:dob => Date.new(2011, 1, 1))
+        Person.create(dob: Date.new(2011, 1, 1))
       end
 
       let!(:adult) do
-        Person.create(:dob => Date.new(1980, 1, 1))
+        Person.create(dob: Date.new(1980, 1, 1))
       end
 
       context "when the range matches documents" do
@@ -1265,7 +1265,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let(:criteria) do
-          Person.where(:dob => range)
+          Person.where(dob: range)
         end
 
         it "includes the lower range value" do
@@ -1284,7 +1284,7 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let(:criteria) do
-          Person.where(:dob => range)
+          Person.where(dob: range)
         end
 
         it "returns an empty result" do
@@ -1296,11 +1296,11 @@ describe Mongoid::Criterion::Inclusion do
     context "when searching for localized fields" do
 
       let!(:soda) do
-        Product.create(:description => "sweet")
+        Product.create(description: "sweet")
       end
 
       let!(:beer) do
-        Product.create(:description => "hoppy")
+        Product.create(description: "hoppy")
       end
 
       before do
@@ -1310,7 +1310,7 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       let(:results) do
-        Product.where(:description => "hopfig")
+        Product.where(description: "hopfig")
       end
 
       after do
@@ -1331,11 +1331,11 @@ describe Mongoid::Criterion::Inclusion do
         end
 
         let!(:person) do
-          Person.create(:title => string)
+          Person.create(title: string)
         end
 
         let(:from_db) do
-          Person.where(:title => string)
+          Person.where(title: string)
         end
 
         it "does not convert the field to a bson id" do
@@ -1349,7 +1349,7 @@ describe Mongoid::Criterion::Inclusion do
       context "when providing a single id" do
 
         let(:from_db) do
-          Person.where(:_id => person.id.to_s).first
+          Person.where(_id: person.id.to_s).first
         end
 
         it "returns the matching documents" do
@@ -1363,7 +1363,7 @@ describe Mongoid::Criterion::Inclusion do
       context "when chaining on the same key" do
 
         let(:from_db) do
-          Person.where(:title => "Maam").where(:title => "Sir")
+          Person.where(title: "Maam").where(title: "Sir")
         end
 
         it "overrides the previous key" do
@@ -1389,20 +1389,20 @@ describe Mongoid::Criterion::Inclusion do
     context "with untyped criteria" do
 
       it "typecasts integers" do
-        Person.where(:age => "33").should eq([ person ])
+        Person.where(age: "33").should eq([ person ])
       end
 
       it "typecasts dates" do
-        Person.where({:dob => dob.to_s}).should eq([ person ])
+        Person.where({dob: dob.to_s}).should eq([ person ])
       end
 
       it "typecasts datetimes" do
-        Person.where({:lunch_time => lunch_time.to_f}).should eq([ person ])
+        Person.where({lunch_time: lunch_time.to_f}).should eq([ person ])
       end
 
       it "typecasts times with zones" do
         time = lunch_time.in_time_zone("Alaska")
-        Person.where(:lunch_time => time).should eq([ person ])
+        Person.where(lunch_time: time).should eq([ person ])
       end
 
       it "typecasts array elements" do
@@ -1421,8 +1421,8 @@ describe Mongoid::Criterion::Inclusion do
     context "with multiple complex criteria" do
 
       before do
-        Person.create(:title => "Mrs", :age => 29)
-        Person.create(:title => "Ms", :age => 41)
+        Person.create(title: "Mrs", age: 29)
+        Person.create(title: "Ms", age: 41)
       end
 
       it "returns those matching both criteria" do
@@ -1430,15 +1430,15 @@ describe Mongoid::Criterion::Inclusion do
       end
 
       it "returns nothing if in and nin clauses cancel each other out" do
-        Person.any_in(:title => ["Sir"]).not_in(:title => ["Sir"]).should be_empty
+        Person.any_in(title: ["Sir"]).not_in(title: ["Sir"]).should be_empty
       end
 
       it "returns nothing if in and nin clauses cancel each other out ordered the other way" do
-        Person.not_in(:title => ["Sir"]).any_in(:title => ["Sir"]).should be_empty
+        Person.not_in(title: ["Sir"]).any_in(title: ["Sir"]).should be_empty
       end
 
       it "returns the intersection of in and nin clauses" do
-        Person.any_in(:title => ["Sir", "Mrs"]).not_in(:title => ["Mrs"]).should eq([person])
+        Person.any_in(title: ["Sir", "Mrs"]).not_in(title: ["Mrs"]).should eq([person])
       end
 
       it "returns the intersection of two in clauses" do
@@ -1525,7 +1525,7 @@ describe Mongoid::Criterion::Inclusion do
       context "#match" do
 
         it "returns those matching a partial element in a list" do
-          Person.where(:things.matches => { :phone => "HTC Incredible" }).should eq([person])
+          Person.where(:things.matches => { phone: "HTC Incredible" }).should eq([person])
         end
       end
     end
@@ -1533,7 +1533,7 @@ describe Mongoid::Criterion::Inclusion do
     context "when searching on a custom type" do
 
       let(:criteria) do
-        Bar.where(:lat_lng => {
+        Bar.where(lat_lng: {
           "$nearSphere" => [ 20, 20 ],
           "$maxDistance" => 1.5
         })
@@ -1541,7 +1541,7 @@ describe Mongoid::Criterion::Inclusion do
 
       it "does not convert the selector" do
         criteria.selector.should eq({
-          :lat_lng => {
+          lat_lng: {
             "$nearSphere" => [ 20, 20 ],
             "$maxDistance" => 1.5
           }
@@ -1554,11 +1554,11 @@ describe Mongoid::Criterion::Inclusion do
       context "when the field is not defined" do
 
         let(:criteria) do
-          Person.where(:service_area => { "$ne" => true })
+          Person.where(service_area: { "$ne" => true })
         end
 
         it "creates the proper selector" do
-          criteria.selector.should eq({ :service_area => { "$ne" => true }})
+          criteria.selector.should eq({ service_area: { "$ne" => true }})
         end
       end
 
@@ -1568,13 +1568,13 @@ describe Mongoid::Criterion::Inclusion do
 
           let(:criteria) do
             Person.where(:aliases.matches => {
-              :verified => { "$ne" => true }
+              verified: { "$ne" => true }
             })
           end
 
           it "properly typecasts the boolean values" do
             criteria.selector.should eq(
-              { :aliases => { "$elemMatch" => { :verified => { "$ne" => true }}}}
+              { aliases: { "$elemMatch" => { verified: { "$ne" => true }}}}
             )
           end
         end
@@ -1588,12 +1588,12 @@ describe Mongoid::Criterion::Inclusion do
         context "when no existing selector exists" do
 
           let(:criteria) do
-            base.where(:title => "Title", :text => "Text")
+            base.where(title: "Title", text: "Text")
           end
 
           it "adds the clause to the selector" do
             criteria.selector.should eq(
-              { :title => "Title", :text => "Text" }
+              { title: "Title", text: "Text" }
             )
           end
         end
@@ -1601,12 +1601,12 @@ describe Mongoid::Criterion::Inclusion do
         context "when an existing id selector exists" do
 
           let(:criteria) do
-            base.where(:_id.in => [ 1, 2, 3 ]).where(:_id => 4)
+            base.where(:_id.in => [ 1, 2, 3 ]).where(_id: 4)
           end
 
           it "adds the clause to the selector" do
             criteria.selector.should eq(
-              { "$and" => [{ :_id => { "$in" => [ 1, 2, 3 ] } }, { :_id => 4 }] }
+              { "$and" => [{ _id: { "$in" => [ 1, 2, 3 ] } }, { _id: 4 }] }
             )
           end
         end
@@ -1616,33 +1616,33 @@ describe Mongoid::Criterion::Inclusion do
           context "when the value is not an array" do
 
             let(:criteria) do
-              base.where(:aliases => "007")
+              base.where(aliases: "007")
             end
 
             it "does not convert the value" do
-              criteria.selector.should eq({ :aliases => "007" })
+              criteria.selector.should eq({ aliases: "007" })
             end
           end
 
           context "when the value is nil" do
 
             let(:criteria) do
-              base.where(:aliases => nil)
+              base.where(aliases: nil)
             end
 
             it "does not convert the value" do
-              criteria.selector.should eq({ :aliases => nil })
+              criteria.selector.should eq({ aliases: nil })
             end
           end
 
           context "when the value is an empty string" do
 
             let(:criteria) do
-              base.where(:foreign_identity => "")
+              base.where(foreign_identity: "")
             end
 
             it "does not convert the value to nil" do
-              criteria.selector.should eq(:foreign_identity => "")
+              criteria.selector.should eq(foreign_identity: "")
             end
           end
         end
@@ -1657,15 +1657,15 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           let(:criteria) do
-            base.any_in(:field => [ "test" ])
+            base.any_in(field: [ "test" ])
           end
 
           let(:merged) do
-            criteria.where(:field => "testing")
+            criteria.where(field: "testing")
           end
 
           it "overwrites the initial value" do
-            merged.selector.should eq({ :field => "testing" })
+            merged.selector.should eq({ field: "testing" })
           end
         end
 
@@ -1676,16 +1676,16 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           let(:criteria) do
-            base.any_in(:_id => [ id ])
+            base.any_in(_id: [ id ])
           end
 
           let(:merged) do
-            criteria.where(:_id => id)
+            criteria.where(_id: id)
           end
 
           it "converts to an $and criteria" do
             merged.selector.should eq(
-              { "$and" => [{ :_id => { "$in" => [ id ] }}, { :_id => id }] }
+              { "$and" => [{ _id: { "$in" => [ id ] }}, { _id: id }] }
             )
           end
         end
@@ -1699,7 +1699,7 @@ describe Mongoid::Criterion::Inclusion do
 
         it "returns a criteria with the combined selector" do
           criteria.selector.should eq(
-            { :owner_id => { "$ne" => nil, "$ne" => 1 } }
+            { owner_id: { "$ne" => nil, "$ne" => 1 } }
           )
         end
       end
@@ -1714,7 +1714,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching an all clause" do
             criteria.selector.should eq(
-              { :title => { "$all" => ["Sir"] } }
+              { title: { "$all" => ["Sir"] } }
             )
           end
         end
@@ -1727,7 +1727,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching an exists clause" do
             criteria.selector.should eq(
-              { :title => { "$exists" => true } }
+              { title: { "$exists" => true } }
             )
           end
         end
@@ -1740,7 +1740,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching a gt clause" do
             criteria.selector.should eq(
-              { :age => { "$gt" => 30 } }
+              { age: { "$gt" => 30 } }
             )
           end
         end
@@ -1753,7 +1753,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching a gte clause" do
             criteria.selector.should eq(
-              { :age => { "$gte" => 33 } }
+              { age: { "$gte" => 33 } }
             )
           end
         end
@@ -1766,7 +1766,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching an in clause" do
             criteria.selector.should eq(
-              { :title => { "$in" => ["Sir", "Madam"] } }
+              { title: { "$in" => ["Sir", "Madam"] } }
             )
           end
         end
@@ -1778,7 +1778,7 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           it "returns a selector matching a lt clause" do
-            criteria.selector.should eq({ :age => { "$lt" => 34 }})
+            criteria.selector.should eq({ age: { "$lt" => 34 }})
           end
         end
 
@@ -1789,7 +1789,7 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           it "returns a selector matching a lte clause" do
-            criteria.selector.should eq({ :age => { "$lte" => 33 }})
+            criteria.selector.should eq({ age: { "$lte" => 33 }})
           end
         end
 
@@ -1802,7 +1802,7 @@ describe Mongoid::Criterion::Inclusion do
             end
 
             it "returns a selector matching a ne clause" do
-              criteria.selector.should eq({ :age => { "$ne" => 50 }})
+              criteria.selector.should eq({ age: { "$ne" => 50 }})
             end
           end
 
@@ -1813,7 +1813,7 @@ describe Mongoid::Criterion::Inclusion do
             end
 
             it "returns a selector matching a ne clause" do
-              criteria.selector.should eq({ :title => { "$ne" => "" }})
+              criteria.selector.should eq({ title: { "$ne" => "" }})
             end
           end
         end
@@ -1826,7 +1826,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching a ne clause" do
             criteria.selector.should eq(
-              { :location => { "$near" => [ 50, 40 ] }}
+              { location: { "$near" => [ 50, 40 ] }}
             )
           end
         end
@@ -1839,7 +1839,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching a nin clause" do
             criteria.selector.should eq(
-              { :title => { "$nin" => ["Esquire", "Congressman"] }}
+              { title: { "$nin" => ["Esquire", "Congressman"] }}
             )
           end
         end
@@ -1851,7 +1851,7 @@ describe Mongoid::Criterion::Inclusion do
           end
 
           it "returns a selector matching a size clause" do
-            criteria.selector.should eq({ :aliases => { "$size" => 2 }})
+            criteria.selector.should eq({ aliases: { "$size" => 2 }})
           end
         end
 
@@ -1863,7 +1863,7 @@ describe Mongoid::Criterion::Inclusion do
 
           it "returns a selector matching a ne clause" do
             criteria.selector.should eq(
-              { :location => { "$within" => { "$center" => [ [ 50, -40 ], 1 ] }}}
+              { location: { "$within" => { "$center" => [ [ 50, -40 ], 1 ] }}}
             )
           end
         end

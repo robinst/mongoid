@@ -5,7 +5,7 @@ describe Mongoid::Relations::Metadata do
   describe "#builder" do
 
     let(:metadata) do
-      described_class.new(:relation => Mongoid::Relations::Embedded::One)
+      described_class.new(relation: Mongoid::Relations::Embedded::One)
     end
 
     let(:object) do
@@ -28,8 +28,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Embedded::Many,
-          :cascade_callbacks => true
+          relation: Mongoid::Relations::Embedded::Many,
+          cascade_callbacks: true
         )
       end
 
@@ -42,8 +42,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Embedded::Many,
-          :cascade_callbacks => false
+          relation: Mongoid::Relations::Embedded::Many,
+          cascade_callbacks: false
         )
       end
 
@@ -56,7 +56,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Embedded::Many
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -72,8 +72,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :posts,
-          :relation => Mongoid::Relations::Referenced::Many
+          name: :posts,
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -86,9 +86,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :posts,
-          :relation => Mongoid::Relations::Referenced::Many,
-          :dependent => :delete
+          name: :posts,
+          relation: Mongoid::Relations::Referenced::Many,
+          dependent: :delete
         )
       end
 
@@ -103,9 +103,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :posts,
-          :relation => Mongoid::Relations::Referenced::Many,
-          :dependent => :destroy
+          name: :posts,
+          relation: Mongoid::Relations::Referenced::Many,
+          dependent: :destroy
         )
       end
 
@@ -120,9 +120,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :posts,
-          :relation => Mongoid::Relations::Referenced::Many,
-          :dependent => :nullify
+          name: :posts,
+          relation: Mongoid::Relations::Referenced::Many,
+          dependent: :nullify
         )
       end
 
@@ -138,8 +138,8 @@ describe Mongoid::Relations::Metadata do
 
     let(:metadata) do
       described_class.new(
-        :relation => Mongoid::Relations::Referenced::Many,
-        :class_name => "Person"
+        relation: Mongoid::Relations::Referenced::Many,
+        class_name: "Person"
       )
     end
 
@@ -156,8 +156,8 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :relation => Mongoid::Relations::Referenced::Many,
-            :class_name => "::Person"
+            relation: Mongoid::Relations::Referenced::Many,
+            class_name: "::Person"
           )
         end
 
@@ -170,8 +170,8 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :relation => Mongoid::Relations::Referenced::Many,
-            :class_name => "Person"
+            relation: Mongoid::Relations::Referenced::Many,
+            class_name: "Person"
           )
         end
 
@@ -194,7 +194,7 @@ describe Mongoid::Relations::Metadata do
             end
 
             let(:metadata) do
-              described_class.new(:name => :name, :relation => relation, :inverse_class_name => "Person")
+              described_class.new(name: :name, relation: relation, inverse_class_name: "Person")
             end
 
             it "classifies and constantizes the association name and adds the module" do
@@ -209,7 +209,7 @@ describe Mongoid::Relations::Metadata do
             end
 
             let(:metadata) do
-              described_class.new(:name => :addresses, :relation => relation, :inverse_class_name => "Person")
+              described_class.new(name: :addresses, relation: relation, inverse_class_name: "Person")
             end
 
             it "classifies and constantizes the association name and adds the module" do
@@ -228,7 +228,7 @@ describe Mongoid::Relations::Metadata do
             end
 
             let(:metadata) do
-              described_class.new(:name => :name, :relation => relation, :inverse_class_name => "Business::Person")
+              described_class.new(name: :name, relation: relation, inverse_class_name: "Business::Person")
             end
 
             it "classifies and constantizes the association name and adds the module" do
@@ -243,7 +243,7 @@ describe Mongoid::Relations::Metadata do
             end
 
             let(:metadata) do
-              described_class.new(:name => :addresses, :relation => relation, :inverse_class_name => "Business::Person")
+              described_class.new(name: :addresses, relation: relation, inverse_class_name: "Business::Person")
             end
 
             it "classifies and constantizes the association name and adds the module" do
@@ -263,7 +263,7 @@ describe Mongoid::Relations::Metadata do
           end
 
           let(:metadata) do
-            described_class.new(:name => :name, :relation => relation)
+            described_class.new(name: :name, relation: relation)
           end
 
           it "classifies and constantizes the association name" do
@@ -278,7 +278,7 @@ describe Mongoid::Relations::Metadata do
           end
 
           let(:metadata) do
-            described_class.new(:name => :addresses, :relation => relation)
+            described_class.new(name: :addresses, relation: relation)
           end
 
           it "classifies and constantizes the association name" do
@@ -297,8 +297,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::Many,
-          :dependent => :destroy
+          relation: Mongoid::Relations::Referenced::Many,
+          dependent: :destroy
         )
       end
 
@@ -311,7 +311,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::Many
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -327,7 +327,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Embedded::Many
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -340,7 +340,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::Many
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -354,8 +354,8 @@ describe Mongoid::Relations::Metadata do
 
     let(:metadata) do
       described_class.new(
-        :relation => Mongoid::Relations::Referenced::Many,
-        :extend => :value
+        relation: Mongoid::Relations::Referenced::Many,
+        extend: :value
       )
     end
 
@@ -370,8 +370,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::Many,
-          :extend => :value
+          relation: Mongoid::Relations::Referenced::Many,
+          extend: :value
         )
       end
 
@@ -384,7 +384,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::Many
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -406,8 +406,8 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :person,
-                :relation => Mongoid::Relations::Referenced::In
+                name: :person,
+                relation: Mongoid::Relations::Referenced::In
               )
             end
 
@@ -420,9 +420,9 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :person,
-                :relation => Mongoid::Relations::Referenced::In,
-                :class_name => "TheseAreNotTheDriods"
+                name: :person,
+                relation: Mongoid::Relations::Referenced::In,
+                class_name: "TheseAreNotTheDriods"
               )
             end
 
@@ -435,9 +435,9 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :apple,
-                :relation => Mongoid::Relations::Referenced::In,
-                :class_name => "Fruits::Apple"
+                name: :apple,
+                relation: Mongoid::Relations::Referenced::In,
+                class_name: "Fruits::Apple"
               )
             end
 
@@ -451,8 +451,8 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :people,
-              :relation => Mongoid::Relations::Referenced::ManyToMany
+              name: :people,
+              relation: Mongoid::Relations::Referenced::ManyToMany
             )
           end
 
@@ -463,9 +463,9 @@ describe Mongoid::Relations::Metadata do
           context "given a specific foreign key" do
             let(:metadata) do
             described_class.new(
-                :name => :follower,
-                :foreign_key => :follower_list,
-                :relation => Mongoid::Relations::Referenced::ManyToMany
+                name: :follower,
+                foreign_key: :follower_list,
+                relation: Mongoid::Relations::Referenced::ManyToMany
               )
             end
 
@@ -477,9 +477,9 @@ describe Mongoid::Relations::Metadata do
           context "using name as foreign key" do
             let(:metadata) do
             described_class.new(
-                :name => :followers,
-                :class_name => "Person",
-                :relation => Mongoid::Relations::Referenced::ManyToMany
+                name: :followers,
+                class_name: "Person",
+                relation: Mongoid::Relations::Referenced::ManyToMany
               )
             end
 
@@ -491,10 +491,10 @@ describe Mongoid::Relations::Metadata do
           context "when the class is namespaced" do
             let(:metadata) do
               described_class.new(
-                :name => :bananas,
-                :relation => Mongoid::Relations::Referenced::ManyToMany,
-                :inverse_class_name => "Fruits::Apple",
-                :class_name => "Fruits::Banana"
+                name: :bananas,
+                relation: Mongoid::Relations::Referenced::ManyToMany,
+                inverse_class_name: "Fruits::Apple",
+                class_name: "Fruits::Banana"
               )
             end
 
@@ -515,9 +515,9 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :post,
-              :relation => Mongoid::Relations::Referenced::One,
-              :inverse_class_name => "Person"
+              name: :post,
+              relation: Mongoid::Relations::Referenced::One,
+              inverse_class_name: "Person"
             )
           end
 
@@ -532,10 +532,10 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :created_streets,
-                :relation => Mongoid::Relations::Referenced::Many,
-                :inverse_class_name => "House",
-                :inverse_of => :creator
+                name: :created_streets,
+                relation: Mongoid::Relations::Referenced::Many,
+                inverse_class_name: "House",
+                inverse_of: :creator
               )
             end
 
@@ -548,9 +548,9 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :posts,
-                :relation => Mongoid::Relations::Referenced::Many,
-                :inverse_class_name => "Person"
+                name: :posts,
+                relation: Mongoid::Relations::Referenced::Many,
+                inverse_class_name: "Person"
               )
             end
 
@@ -563,10 +563,10 @@ describe Mongoid::Relations::Metadata do
 
             let(:metadata) do
               described_class.new(
-                :name => :bananas,
-                :relation => Mongoid::Relations::Referenced::Many,
-                :inverse_class_name => "Fruits::Apple",
-                :class_name => "Fruits::Banana"
+                name: :bananas,
+                relation: Mongoid::Relations::Referenced::Many,
+                inverse_class_name: "Fruits::Apple",
+                class_name: "Fruits::Banana"
               )
             end
 
@@ -582,9 +582,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::ManyToMany,
-          :foreign_key => "blog_post_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::ManyToMany,
+          foreign_key: "blog_post_id"
         )
       end
 
@@ -600,9 +600,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :preferences,
-          :relation => Mongoid::Relations::Referenced::ManyToMany,
-          :foreign_key => "preference_ids"
+          name: :preferences,
+          relation: Mongoid::Relations::Referenced::ManyToMany,
+          foreign_key: "preference_ids"
         )
       end
 
@@ -615,9 +615,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -633,9 +633,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -648,10 +648,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :ratings,
-          :relation => Mongoid::Relations::Referenced::Many,
-          :as => :ratable,
-          :inverse_class_name => "Movie"
+          name: :ratings,
+          relation: Mongoid::Relations::Referenced::Many,
+          as: :ratable,
+          inverse_class_name: "Movie"
         )
       end
 
@@ -665,9 +665,9 @@ describe Mongoid::Relations::Metadata do
 
     let(:metadata) do
       described_class.new(
-        :name => :preferences,
-        :relation => Mongoid::Relations::Referenced::ManyToMany,
-        :inverse_class_name => "Person"
+        name: :preferences,
+        relation: Mongoid::Relations::Referenced::ManyToMany,
+        inverse_class_name: "Person"
       )
     end
 
@@ -696,9 +696,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -711,10 +711,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :ratable,
-          :relation => Mongoid::Relations::Referenced::In,
-          :polymorphic => true,
-          :inverse_class_name => "Rating"
+          name: :ratable,
+          relation: Mongoid::Relations::Referenced::In,
+          polymorphic: true,
+          inverse_class_name: "Rating"
         )
       end
 
@@ -730,9 +730,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -745,10 +745,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :ratable,
-          :relation => Mongoid::Relations::Referenced::In,
-          :polymorphic => true,
-          :inverse_class_name => "Rating"
+          name: :ratable,
+          relation: Mongoid::Relations::Referenced::In,
+          polymorphic: true,
+          inverse_class_name: "Rating"
         )
       end
 
@@ -764,9 +764,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -779,10 +779,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :ratable,
-          :relation => Mongoid::Relations::Referenced::In,
-          :polymorphic => true,
-          :inverse_class_name => "Rating"
+          name: :ratable,
+          relation: Mongoid::Relations::Referenced::In,
+          polymorphic: true,
+          inverse_class_name: "Rating"
         )
       end
 
@@ -798,9 +798,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :person,
-          :relation => Mongoid::Relations::Referenced::In,
-          :foreign_key => "person_id"
+          name: :person,
+          relation: Mongoid::Relations::Referenced::In,
+          foreign_key: "person_id"
         )
       end
 
@@ -813,10 +813,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :ratable,
-          :relation => Mongoid::Relations::Referenced::In,
-          :polymorphic => true,
-          :inverse_class_name => "Rating"
+          name: :ratable,
+          relation: Mongoid::Relations::Referenced::In,
+          polymorphic: true,
+          inverse_class_name: "Rating"
         )
       end
 
@@ -832,8 +832,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :index => true,
-          :relation => Mongoid::Relations::Referenced::In
+          index: true,
+          relation: Mongoid::Relations::Referenced::In
         )
       end
 
@@ -846,7 +846,7 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :relation => Mongoid::Relations::Referenced::In
+          relation: Mongoid::Relations::Referenced::In
         )
       end
 
@@ -859,8 +859,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :index => false,
-          :relation => Mongoid::Relations::Referenced::In
+          index: false,
+          relation: Mongoid::Relations::Referenced::In
         )
       end
 
@@ -880,9 +880,9 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :inverse_class_name => "User",
-              :name => :shop,
-              :relation => Mongoid::Relations::Referenced::One
+              inverse_class_name: "User",
+              name: :shop,
+              relation: Mongoid::Relations::Referenced::One
             )
           end
 
@@ -895,11 +895,11 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :left_eye,
-              :as => :eyeable,
-              :inverse_class_name => "Face",
-              :class_name => "Eye",
-              :relation => Mongoid::Relations::Referenced::One
+              name: :left_eye,
+              as: :eyeable,
+              inverse_class_name: "Face",
+              class_name: "Eye",
+              relation: Mongoid::Relations::Referenced::One
             )
           end
 
@@ -912,10 +912,10 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :eyeable,
-              :polymorphic => true,
-              :inverse_class_name => "Eye",
-              :relation => Mongoid::Relations::Referenced::In
+              name: :eyeable,
+              polymorphic: true,
+              inverse_class_name: "Eye",
+              relation: Mongoid::Relations::Referenced::In
             )
           end
 
@@ -931,8 +931,8 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :inverse_of => nil,
-              :relation => Mongoid::Relations::Referenced::In
+              inverse_of: nil,
+              relation: Mongoid::Relations::Referenced::In
             )
           end
 
@@ -945,8 +945,8 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :inverse_of => :crazy_name,
-              :relation => Mongoid::Relations::Referenced::In
+              inverse_of: :crazy_name,
+              relation: Mongoid::Relations::Referenced::In
             )
           end
 
@@ -960,10 +960,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :pet,
-            :class_name => "Animal",
-            :inverse_class_name => "Person",
-            :relation => Mongoid::Relations::Referenced::In
+            name: :pet,
+            class_name: "Animal",
+            inverse_class_name: "Person",
+            relation: Mongoid::Relations::Referenced::In
           )
         end
 
@@ -976,10 +976,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :addresses,
-            :as => :addressable,
-            :inverse_class_name => "Person",
-            :relation => Mongoid::Relations::Referenced::Many
+            name: :addresses,
+            as: :addressable,
+            inverse_class_name: "Person",
+            relation: Mongoid::Relations::Referenced::Many
           )
         end
 
@@ -992,10 +992,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :addressable,
-            :polymorphic => true,
-            :inverse_class_name => "Address",
-            :relation => Mongoid::Relations::Referenced::In
+            name: :addressable,
+            polymorphic: true,
+            inverse_class_name: "Address",
+            relation: Mongoid::Relations::Referenced::In
           )
         end
 
@@ -1010,11 +1010,11 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :parent_role,
-              :class_name => "Role",
-              :inverse_class_name => "Role",
-              :relation => Mongoid::Relations::Embedded::In,
-              :cyclic => true
+              name: :parent_role,
+              class_name: "Role",
+              inverse_class_name: "Role",
+              relation: Mongoid::Relations::Embedded::In,
+              cyclic: true
             )
           end
 
@@ -1027,11 +1027,11 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :parent_entry,
-              :class_name => "Entry",
-              :inverse_class_name => "Entry",
-              :relation => Mongoid::Relations::Embedded::In,
-              :cyclic => true
+              name: :parent_entry,
+              class_name: "Entry",
+              inverse_class_name: "Entry",
+              relation: Mongoid::Relations::Embedded::In,
+              cyclic: true
             )
           end
 
@@ -1049,11 +1049,11 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :preferences,
-          :index => true,
-          :dependent => :nullify,
-          :relation => Mongoid::Relations::Referenced::ManyToMany,
-          :inverse_class_name => "Person"
+          name: :preferences,
+          index: true,
+          dependent: :nullify,
+          relation: Mongoid::Relations::Referenced::ManyToMany,
+          inverse_class_name: "Person"
         )
       end
 
@@ -1066,10 +1066,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :blogs,
-          :class_name => "Blog",
-          :relation => Mongoid::Relations::Referenced::ManyToMany,
-          :inverse_of => nil
+          name: :blogs,
+          class_name: "Blog",
+          relation: Mongoid::Relations::Referenced::ManyToMany,
+          inverse_of: nil
         )
       end
 
@@ -1083,8 +1083,8 @@ describe Mongoid::Relations::Metadata do
 
     let(:metadata) do
       described_class.new(
-        :inverse_class_name => "Person",
-        :relation => Mongoid::Relations::Referenced::In
+        inverse_class_name: "Person",
+        relation: Mongoid::Relations::Referenced::In
       )
     end
 
@@ -1099,10 +1099,10 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :pet,
-          :class_name => "Animal",
-          :inverse_class_name => "Person",
-          :relation => Mongoid::Relations::Referenced::In
+          name: :pet,
+          class_name: "Animal",
+          inverse_class_name: "Person",
+          relation: Mongoid::Relations::Referenced::In
         )
       end
 
@@ -1119,9 +1119,9 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :eyeable,
-              :polymorphic => true,
-              :relation => Mongoid::Relations::Referenced::In
+              name: :eyeable,
+              polymorphic: true,
+              relation: Mongoid::Relations::Referenced::In
             )
           end
 
@@ -1138,10 +1138,10 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :blue_eyes,
-              :inverse_class_name => "EyeBowl",
-              :as => :eyeable,
-              :relation => Mongoid::Relations::Referenced::Many
+              name: :blue_eyes,
+              inverse_class_name: "EyeBowl",
+              as: :eyeable,
+              relation: Mongoid::Relations::Referenced::Many
             )
           end
 
@@ -1155,10 +1155,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :ratable,
-            :inverse_class_name => "Movie",
-            :polymorphic => true,
-            :relation => Mongoid::Relations::Referenced::In
+            name: :ratable,
+            inverse_class_name: "Movie",
+            polymorphic: true,
+            relation: Mongoid::Relations::Referenced::In
           )
         end
 
@@ -1175,10 +1175,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :ratings,
-            :inverse_class_name => "Rating",
-            :as => :ratable,
-            :relation => Mongoid::Relations::Referenced::Many
+            name: :ratings,
+            inverse_class_name: "Rating",
+            as: :ratable,
+            relation: Mongoid::Relations::Referenced::Many
           )
         end
 
@@ -1195,8 +1195,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :addresses,
-          :relation => Mongoid::Relations::Embedded::Many
+          name: :addresses,
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -1213,8 +1213,8 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :posts,
-              :relation => Mongoid::Relations::Referenced::ManyToMany
+              name: :posts,
+              relation: Mongoid::Relations::Referenced::ManyToMany
             )
           end
 
@@ -1227,9 +1227,9 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :name => :ratable,
-              :relation => Mongoid::Relations::Referenced::In,
-              :polymorphic => true
+              name: :ratable,
+              relation: Mongoid::Relations::Referenced::In,
+              polymorphic: true
             )
           end
 
@@ -1243,9 +1243,9 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :addresses,
-            :relation => Mongoid::Relations::Referenced::Many,
-            :inverse_class_name => "Person"
+            name: :addresses,
+            relation: Mongoid::Relations::Referenced::Many,
+            inverse_class_name: "Person"
           )
         end
 
@@ -1259,8 +1259,8 @@ describe Mongoid::Relations::Metadata do
   context "#order" do
     let(:metadata) do
       described_class.new(
-        :order => :rating.asc,
-        :relation => Mongoid::Relations::Referenced::Many
+        order: :rating.asc,
+        relation: Mongoid::Relations::Referenced::Many
       )
     end
 
@@ -1276,8 +1276,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :class_name => "Address",
-          :relation => Mongoid::Relations::Embedded::Many
+          class_name: "Address",
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -1290,8 +1290,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :class_name => "::Address",
-          :relation => Mongoid::Relations::Embedded::Many
+          class_name: "::Address",
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -1306,7 +1306,7 @@ describe Mongoid::Relations::Metadata do
     context "when the relation is a many" do
 
       let(:metadata) do
-        described_class.new(:relation => Mongoid::Relations::Embedded::Many)
+        described_class.new(relation: Mongoid::Relations::Embedded::Many)
       end
 
       it "returns true" do
@@ -1317,7 +1317,7 @@ describe Mongoid::Relations::Metadata do
     context "when the relation is not a many" do
 
       let(:metadata) do
-        described_class.new(:relation => Mongoid::Relations::Embedded::One)
+        described_class.new(relation: Mongoid::Relations::Embedded::One)
       end
 
       it "returns false" do
@@ -1329,7 +1329,7 @@ describe Mongoid::Relations::Metadata do
   describe "#macro" do
 
     let(:metadata) do
-      described_class.new(:relation => Mongoid::Relations::Embedded::One)
+      described_class.new(relation: Mongoid::Relations::Embedded::One)
     end
 
     it "returns the macro from the relation" do
@@ -1340,7 +1340,7 @@ describe Mongoid::Relations::Metadata do
   describe "#nested_builder" do
 
     let(:metadata) do
-      described_class.new(:relation => Mongoid::Relations::Embedded::One)
+      described_class.new(relation: Mongoid::Relations::Embedded::One)
     end
 
     let(:attributes) do
@@ -1365,10 +1365,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :posts,
-            :inverse_class_name => "Post",
-            :relation => Mongoid::Relations::Referenced::Many,
-            :validate => true
+            name: :posts,
+            inverse_class_name: "Post",
+            relation: Mongoid::Relations::Referenced::Many,
+            validate: true
           )
         end
 
@@ -1381,10 +1381,10 @@ describe Mongoid::Relations::Metadata do
 
         let(:metadata) do
           described_class.new(
-            :name => :posts,
-            :inverse_class_name => "Post",
-            :relation => Mongoid::Relations::Referenced::Many,
-            :validate => false
+            name: :posts,
+            inverse_class_name: "Post",
+            relation: Mongoid::Relations::Referenced::Many,
+            validate: false
           )
         end
 
@@ -1398,9 +1398,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :posts,
-          :inverse_class_name => "Post",
-          :relation => Mongoid::Relations::Referenced::Many
+          name: :posts,
+          inverse_class_name: "Post",
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -1416,9 +1416,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :versions,
-          :relation => Mongoid::Relations::Embedded::Many,
-          :versioned => true
+          name: :versions,
+          relation: Mongoid::Relations::Embedded::Many,
+          versioned: true
         )
       end
 
@@ -1431,9 +1431,9 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :versions,
-          :relation => Mongoid::Relations::Embedded::Many,
-          :versioned => false
+          name: :versions,
+          relation: Mongoid::Relations::Embedded::Many,
+          versioned: false
         )
       end
 
@@ -1446,8 +1446,8 @@ describe Mongoid::Relations::Metadata do
 
       let(:metadata) do
         described_class.new(
-          :name => :versions,
-          :relation => Mongoid::Relations::Embedded::Many
+          name: :versions,
+          relation: Mongoid::Relations::Embedded::Many
         )
       end
 
@@ -1473,7 +1473,7 @@ describe Mongoid::Relations::Metadata do
         let(:metadata) do
           described_class.new(
             property.to_sym => :value,
-            :relation => Mongoid::Relations::Embedded::Many
+            relation: Mongoid::Relations::Embedded::Many
           )
         end
 
@@ -1489,7 +1489,7 @@ describe Mongoid::Relations::Metadata do
           let(:metadata) do
             described_class.new(
               property.to_sym => :value,
-              :relation => Mongoid::Relations::Embedded::Many
+              relation: Mongoid::Relations::Embedded::Many
             )
           end
 
@@ -1502,7 +1502,7 @@ describe Mongoid::Relations::Metadata do
 
           let(:metadata) do
             described_class.new(
-              :relation => Mongoid::Relations::Embedded::Many
+              relation: Mongoid::Relations::Embedded::Many
             )
           end
 

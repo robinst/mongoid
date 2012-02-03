@@ -2,6 +2,82 @@ require "spec_helper"
 
 describe Mongoid::Safety do
 
+  describe ".clear" do
+
+    context "when options exist on the current thread" do
+
+      before do
+        Band.safely(true)
+      end
+
+      let!(:cleared) do
+        described_class.clear
+      end
+
+      it "remove the options from the current thread" do
+        described_class.options.should be_false
+      end
+
+      it "returns true" do
+        cleared.should be_true
+      end
+    end
+
+    context "when options do not exist on the current thread" do
+
+      it "returns true" do
+        described_class.clear.should be_true
+      end
+    end
+  end
+
+  describe ".options" do
+
+    context "when configured to persist in safe mode" do
+
+      before do
+        Mongoid.persist_in_safe_mode = true
+      end
+
+      after do
+        Mongoid.persist_in_safe_mode = false
+      end
+
+      context "when options exist on the current thread" do
+
+        before do
+          Band.safely(w: 2)
+        end
+
+        after do
+          described_class.clear
+        end
+
+        it "returns the options" do
+          described_class.options.should eq(w: 2)
+        end
+      end
+
+      context "when there are no options on the current thread" do
+
+        it "returns the global configuration" do
+          described_class.options.should be_true
+        end
+      end
+    end
+
+    context "when safe mode is not configured" do
+
+      before do
+        Mongoid.persist_in_safe_mode = false
+      end
+
+      it "returns the global configuration" do
+        described_class.options.should be_false
+      end
+    end
+  end
+
   describe ".safely" do
 
     context "when global safe mode is false" do
@@ -13,7 +89,7 @@ describe Mongoid::Safety do
       describe ".create" do
 
         before do
-          Person.safely.create(:ssn => "432-97-1111")
+          Person.safely.create(ssn: "432-97-1111")
         end
 
         context "when no error occurs" do
@@ -30,16 +106,16 @@ describe Mongoid::Safety do
           end
 
           it "bubbles up to the caller" do
-            lambda {
-              Person.safely.create(:ssn => "432-97-1111")
-            }.should raise_error(Mongo::OperationFailure)
+            expect {
+              Person.safely.create(ssn: "432-97-1111")
+            }.to raise_error(Moped::Errors::OperationFailure)
           end
         end
 
         context "when using .safely(false)" do
 
           it "ignores mongodb error" do
-            Person.safely(false).create(:ssn => "432-97-1111").should be_true
+            Person.safely(false).create(ssn: "432-97-1111").should be_true
           end
 
         end
@@ -48,7 +124,7 @@ describe Mongoid::Safety do
       describe ".create!" do
 
         before do
-          Person.safely.create!(:ssn => "432-97-1112")
+          Person.safely.create!(ssn: "432-97-1112")
         end
 
         context "when no error occurs" do
@@ -65,9 +141,9 @@ describe Mongoid::Safety do
           end
 
           it "bubbles up to the caller" do
-            lambda {
-              Person.safely.create!(:ssn => "432-97-1112")
-            }.should raise_error(Mongo::OperationFailure)
+            expect {
+              Person.safely.create!(ssn: "432-97-1112")
+            }.to raise_error(Moped::Errors::OperationFailure)
           end
         end
 
@@ -75,7 +151,7 @@ describe Mongoid::Safety do
 
           it "raises the validation error" do
             expect {
-              Account.safely.create!(:name => "this name is way too long")
+              Account.safely.create!(name: "this name is way too long")
             }.to raise_error(Mongoid::Errors::Validations)
           end
         end
@@ -84,13 +160,13 @@ describe Mongoid::Safety do
       describe ".save" do
 
         before do
-          Person.safely.create(:ssn => "432-97-1113")
+          Person.safely.create(ssn: "432-97-1113")
         end
 
         context "when a mongodb error occurs" do
 
           let(:person) do
-            Person.new(:ssn => "432-97-1113")
+            Person.new(ssn: "432-97-1113")
           end
 
           before do
@@ -100,7 +176,7 @@ describe Mongoid::Safety do
           it "bubbles up to the caller" do
             expect {
               person.safely.save
-            }.to raise_error(Mongo::OperationFailure)
+            }.to raise_error(Moped::Errors::OperationFailure)
           end
         end
       end
@@ -108,13 +184,13 @@ describe Mongoid::Safety do
       describe ".save!" do
 
         before do
-          Person.safely.create!(:ssn => "432-97-1114")
+          Person.safely.create!(ssn: "432-97-1114")
         end
 
         context "when a mongodb error occurs" do
 
           let(:person) do
-            Person.new(:ssn => "432-97-1114")
+            Person.new(ssn: "432-97-1114")
           end
 
           before do
@@ -124,14 +200,14 @@ describe Mongoid::Safety do
           it "bubbles up to the caller" do
             expect {
               person.safely.save!
-            }.to raise_error(Mongo::OperationFailure)
+            }.to raise_error(Moped::Errors::OperationFailure)
           end
         end
 
         context "when a validation error occurs" do
 
           let(:account) do
-            Account.new(:name => "this name is way too long")
+            Account.new(name: "this name is way too long")
           end
 
           it "raises the validation error" do
@@ -159,7 +235,7 @@ describe Mongoid::Safety do
       describe ".create" do
 
         before do
-          Person.safely.create(:ssn => "432-97-1111")
+          Person.safely.create(ssn: "432-97-1111")
         end
 
         context "when no error occurs" do
@@ -176,19 +252,19 @@ describe Mongoid::Safety do
           end
 
           it "fails silently" do
-            Person.unsafely.create(:ssn => "432-97-1111").should be_true
+            Person.unsafely.create(ssn: "432-97-1111").should be_true
           end
 
           context "when creating again" do
 
             before do
-              Person.unsafely.create(:ssn => "432-97-1111")
+              Person.unsafely.create(ssn: "432-97-1111")
             end
 
             it "uses defaults for subsequent requests" do
               expect {
-                Person.create(:ssn => "432-97-1111")
-              }.to raise_error(Mongo::OperationFailure)
+                Person.create(ssn: "432-97-1111")
+              }.to raise_error(Moped::Errors::OperationFailure)
             end
           end
         end
@@ -197,7 +273,7 @@ describe Mongoid::Safety do
       describe ".save" do
 
         before do
-          Person.safely.create(:ssn => "432-97-1113")
+          Person.safely.create(ssn: "432-97-1113")
         end
 
         context "when a mongodb error occurs" do
@@ -211,19 +287,19 @@ describe Mongoid::Safety do
           end
 
           it "fails silently" do
-            person.unsafely.save(:ssn => "432-97-1113").should be_true
+            person.unsafely.save(ssn: "432-97-1113").should be_true
           end
 
           context "when persisting again" do
 
             before do
-              person.unsafely.save(:ssn => "432-97-1113")
+              person.unsafely.save(ssn: "432-97-1113")
             end
 
             it "uses defaults for subsequent requests" do
               expect {
-                Person.create(:ssn => "432-97-1113")
-              }.to raise_error(Mongo::OperationFailure)
+                Person.create(ssn: "432-97-1113")
+              }.to raise_error(Moped::Errors::OperationFailure)
             end
           end
         end

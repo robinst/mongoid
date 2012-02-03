@@ -36,7 +36,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:person) do
-        Person.new(:name_attributes => { :first_name => "Johnny" })
+        Person.new(name_attributes: { first_name: "Johnny" })
       end
 
       it "sets the nested attributes" do
@@ -52,7 +52,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:person) do
-        Person.new(:addresses_attributes => { "1" => { :street => "Alexanderstr" }})
+        Person.new(addresses_attributes: { "1" => { street: "Alexanderstr" }})
       end
 
       it "sets the nested attributes" do
@@ -62,12 +62,12 @@ describe Mongoid::NestedAttributes do
       context "when there are 10 or more child records" do
 
         let(:person) do
-          Person.new(:addresses => addresses)
+          Person.new(addresses: addresses)
         end
 
         let(:addresses) do
           ('0'..'10').inject({}) do |addresses,i|
-            addresses.merge(i => {:number => i})
+            addresses.merge(i => {number: i})
           end
         end
 
@@ -84,7 +84,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:video) do
-        Video.new(:person_attributes => { :title => "Sir" })
+        Video.new(person_attributes: { title: "Sir" })
       end
 
       it "sets the nested attributes" do
@@ -100,7 +100,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:person) do
-        Person.new(:game_attributes => { :name => "Tron" })
+        Person.new(game_attributes: { name: "Tron" })
       end
 
       it "sets the nested attributes" do
@@ -116,7 +116,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:person) do
-        Person.new(:posts_attributes => { "1" => { :title => "First" }})
+        Person.new(posts_attributes: { "1" => { title: "First" }})
       end
 
       it "sets the nested attributes" do
@@ -132,7 +132,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:person) do
-        Person.new(:preferences_attributes => { "1" => { :name => "First" }})
+        Person.new(preferences_attributes: { "1" => { name: "First" }})
       end
 
       it "sets the nested attributes" do
@@ -147,7 +147,7 @@ describe Mongoid::NestedAttributes do
       end
 
       let(:post) do
-        Post.new(:person_attributes => { :title => "Sir" })
+        Post.new(person_attributes: { title: "Sir" })
       end
 
       it "sets the nested attributes" do
@@ -170,7 +170,7 @@ describe Mongoid::NestedAttributes do
 
           before do
             Person.send(:undef_method, :name_attributes=)
-            Person.accepts_nested_attributes_for :name, :allow_destroy => true
+            Person.accepts_nested_attributes_for :name, allow_destroy: true
           end
 
           after do
@@ -181,7 +181,7 @@ describe Mongoid::NestedAttributes do
           context "when setting the child attributes" do
 
             before do
-              person.name_attributes = { :last_name => "Fischer" }
+              person.name_attributes = { last_name: "Fischer" }
             end
 
             it "sets the child document" do
@@ -215,7 +215,7 @@ describe Mongoid::NestedAttributes do
           before(:all) do
             Person.send(:undef_method, :name_attributes=)
             Person.accepts_nested_attributes_for \
-              :name, :reject_if => lambda { |attrs| attrs[:first_name].blank? }
+              :name, reject_if: ->(attrs){ attrs[:first_name].blank? }
           end
 
           after(:all) do
@@ -226,7 +226,7 @@ describe Mongoid::NestedAttributes do
           context "when the attributes match" do
 
             before do
-              person.name_attributes = { :last_name => "Lang" }
+              person.name_attributes = { last_name: "Lang" }
             end
 
             it "does not add the document" do
@@ -237,7 +237,7 @@ describe Mongoid::NestedAttributes do
           context "when the attributes do not match" do
 
             before do
-              person.name_attributes = { :first_name => "Lang" }
+              person.name_attributes = { first_name: "Lang" }
             end
 
             it "adds the document" do
@@ -251,7 +251,7 @@ describe Mongoid::NestedAttributes do
           before(:all) do
             Person.send(:undef_method, :name_attributes=)
             Person.accepts_nested_attributes_for \
-              :name, :reject_if => :all_blank
+              :name, reject_if: :all_blank
           end
 
           after(:all) do
@@ -262,7 +262,7 @@ describe Mongoid::NestedAttributes do
           context "when all attributes are empty" do
 
             before do
-              person.name_attributes = { :last_name => "" }
+              person.name_attributes = { last_name: "" }
             end
 
             it "does not add the document" do
@@ -273,7 +273,7 @@ describe Mongoid::NestedAttributes do
           context "when an attribute is non-empty" do
 
             before do
-              person.name_attributes = { :first_name => "Lang" }
+              person.name_attributes = { first_name: "Lang" }
             end
 
             it "adds the document" do
@@ -287,7 +287,7 @@ describe Mongoid::NestedAttributes do
           context "with no destroy attribute" do
 
             before do
-              person.name_attributes = { :first_name => "Leo" }
+              person.name_attributes = { first_name: "Leo" }
             end
 
             it "builds a new document" do
@@ -301,7 +301,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :name_attributes=)
-                Person.accepts_nested_attributes_for :name, :allow_destroy => true
+                Person.accepts_nested_attributes_for :name, allow_destroy: true
               end
 
               after(:all) do
@@ -310,7 +310,7 @@ describe Mongoid::NestedAttributes do
               end
 
               before do
-                person.name_attributes = { :first_name => "Leo", :_destroy => "1" }
+                person.name_attributes = { first_name: "Leo", _destroy: "1" }
               end
 
               it "does not build the document" do
@@ -322,7 +322,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :name_attributes=)
-                Person.accepts_nested_attributes_for :name, :allow_destroy => false
+                Person.accepts_nested_attributes_for :name, allow_destroy: false
               end
 
               after(:all) do
@@ -331,7 +331,7 @@ describe Mongoid::NestedAttributes do
               end
 
               before do
-                person.name_attributes = { :first_name => "Leo", :_destroy => "1" }
+                person.name_attributes = { first_name: "Leo", _destroy: "1" }
               end
 
               it "builds the document" do
@@ -356,8 +356,8 @@ describe Mongoid::NestedAttributes do
             context "with no destroy attribute" do
 
               before do
-                person.name = Name.new(:first_name => "Michael")
-                person.name_attributes = { :first_name => "Jack" }
+                person.name = Name.new(first_name: "Michael")
+                person.name_attributes = { first_name: "Jack" }
               end
 
               it "replaces the document" do
@@ -371,7 +371,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :name_attributes=)
-                  Person.accepts_nested_attributes_for :name, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :name, allow_destroy: true
                 end
 
                 after(:all) do
@@ -380,8 +380,8 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  person.name = Name.new(:first_name => "Michael")
-                  person.name_attributes = { :first_name => "Jack", :_destroy => "1" }
+                  person.name = Name.new(first_name: "Michael")
+                  person.name_attributes = { first_name: "Jack", _destroy: "1" }
                 end
 
                 it "does not replace the document" do
@@ -393,7 +393,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :name_attributes=)
-                  Person.accepts_nested_attributes_for :name, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :name, allow_destroy: false
                 end
 
                 after(:all) do
@@ -402,8 +402,8 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  person.name = Name.new(:first_name => "Michael")
-                  person.name_attributes = { :first_name => "Jack", :_destroy => "1" }
+                  person.name = Name.new(first_name: "Michael")
+                  person.name_attributes = { first_name: "Jack", _destroy: "1" }
                 end
 
                 it "replaces the document" do
@@ -419,7 +419,7 @@ describe Mongoid::NestedAttributes do
           context "when there is an existing record" do
 
             let(:name) do
-              Name.new(:first_name => "Joe")
+              Name.new(first_name: "Joe")
             end
 
             before do
@@ -432,7 +432,7 @@ describe Mongoid::NestedAttributes do
 
                 before do
                   person.name_attributes =
-                    { :id => name.id.to_s, :first_name => "Bob" }
+                    { id: name.id.to_s, first_name: "Bob" }
                 end
 
                 it "updates the existing document" do
@@ -456,7 +456,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :name_attributes=)
-                  Person.accepts_nested_attributes_for :name, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :name, allow_destroy: true
                 end
 
                 after(:all) do
@@ -470,7 +470,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       person.name_attributes =
-                        { :id => name.id, :_destroy => truth }
+                        { id: name.id, _destroy: truth }
                     end
 
                     it "destroys the existing document" do
@@ -485,7 +485,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       person.name_attributes =
-                        { :id => name.id, :_destroy => falsehood }
+                        { id: name.id, _destroy: falsehood }
                     end
 
                     it "does not destroy the existing document" do
@@ -499,7 +499,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :name_attributes=)
-                  Person.accepts_nested_attributes_for :name, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :name, allow_destroy: false
                 end
 
                 after(:all) do
@@ -511,7 +511,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.name_attributes =
-                      { :id => name.id, :_destroy => true }
+                      { id: name.id, _destroy: true }
                   end
 
                   it "does not destroy the document" do
@@ -526,8 +526,8 @@ describe Mongoid::NestedAttributes do
                   Person.send(:undef_method, :name_attributes=)
                   Person.accepts_nested_attributes_for \
                     :name,
-                    :update_only => true,
-                    :allow_destroy => true
+                    update_only: true,
+                    allow_destroy: true
                 end
 
                 after(:all) do
@@ -539,7 +539,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.name_attributes =
-                      { :id => name.id, :first_name => "Ro" }
+                      { id: name.id, first_name: "Ro" }
                   end
 
                   it "updates the existing document" do
@@ -551,7 +551,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.name_attributes =
-                      { :id => BSON::ObjectId.new.to_s, :first_name => "Durran" }
+                      { id: BSON::ObjectId.new.to_s, first_name: "Durran" }
                   end
 
                   it "updates the existing document" do
@@ -563,7 +563,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.name_attributes =
-                      { :id => name.id, :_destroy => true }
+                      { id: name.id, _destroy: true }
                   end
 
                   it "destroys the existing document" do
@@ -575,12 +575,12 @@ describe Mongoid::NestedAttributes do
               context "when ids are ObjectId strings" do
 
                 let(:quiz) do
-                  person.quiz = Quiz.new(:topic => "Math")
+                  person.quiz = Quiz.new(topic: "Math")
                 end
 
                 before do
                   person.quiz_attributes = {
-                    "id" => quiz.id.to_s, :topic => "English"
+                    "id" => quiz.id.to_s, topic: "English"
                   }
                 end
 
@@ -595,7 +595,7 @@ describe Mongoid::NestedAttributes do
         context "when the nested document is invalid" do
 
           before do
-            person.pet_attributes = { :name => "$$$" }
+            person.pet_attributes = { name: "$$$" }
           end
 
           it "propagates invalidity to parent" do
@@ -613,7 +613,7 @@ describe Mongoid::NestedAttributes do
           before do
             Canvas.send(:undef_method, :writer_attributes=)
             Canvas.accepts_nested_attributes_for :writer
-            canvas.writer_attributes = { :_type => "HtmlWriter" }
+            canvas.writer_attributes = { _type: "HtmlWriter" }
           end
 
           it "instantiates an object of the given type" do
@@ -635,7 +635,7 @@ describe Mongoid::NestedAttributes do
             context "when no destroy attribute passed" do
 
               before do
-                animal.person_attributes = { :title => "Sir" }
+                animal.person_attributes = { title: "Sir" }
               end
 
               it "builds a new document" do
@@ -650,7 +650,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Animal.send(:undef_method, :person_attributes=)
-                  Animal.accepts_nested_attributes_for :person, :allow_destroy => true
+                  Animal.accepts_nested_attributes_for :person, allow_destroy: true
                 end
 
                 after(:all) do
@@ -659,7 +659,7 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  animal.person_attributes = { :title => "Sir", :_destroy => 1 }
+                  animal.person_attributes = { title: "Sir", _destroy: 1 }
                 end
 
                 it "does not build a new document" do
@@ -671,7 +671,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Animal.send(:undef_method, :person_attributes=)
-                  Animal.accepts_nested_attributes_for :person, :allow_destroy => false
+                  Animal.accepts_nested_attributes_for :person, allow_destroy: false
                 end
 
                 after(:all) do
@@ -680,7 +680,7 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  animal.person_attributes = { :title => "Sir", :_destroy => 1 }
+                  animal.person_attributes = { title: "Sir", _destroy: 1 }
                 end
 
                 it "builds a new document" do
@@ -701,7 +701,7 @@ describe Mongoid::NestedAttributes do
               context "when the id matches" do
 
                 before do
-                  animal.person_attributes = { :id => person.id, :title => "Sir" }
+                  animal.person_attributes = { id: person.id, title: "Sir" }
                 end
 
                 it "updates the existing document" do
@@ -720,7 +720,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Animal.send(:undef_method, :person_attributes=)
-                  Animal.accepts_nested_attributes_for :person, :allow_destroy => true
+                  Animal.accepts_nested_attributes_for :person, allow_destroy: true
                 end
 
                 after(:all) do
@@ -734,7 +734,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       animal.person_attributes =
-                        { :id => person.id, :_destroy => truth }
+                        { id: person.id, _destroy: truth }
                     end
 
                     it "destroys the existing document" do
@@ -749,7 +749,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       animal.person_attributes =
-                        { :id => person.id, :_destroy => falsehood }
+                        { id: person.id, _destroy: falsehood }
                     end
 
                     it "does not destroy the existing document" do
@@ -763,7 +763,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Animal.send(:undef_method, :person_attributes=)
-                  Animal.accepts_nested_attributes_for :person, :allow_destroy => false
+                  Animal.accepts_nested_attributes_for :person, allow_destroy: false
                 end
 
                 after(:all) do
@@ -775,7 +775,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     animal.person_attributes =
-                      { :id => person.id, :_destroy => true }
+                      { id: person.id, _destroy: true }
                   end
 
                   it "does not delete the document" do
@@ -790,15 +790,15 @@ describe Mongoid::NestedAttributes do
                   Animal.send(:undef_method, :person_attributes=)
                   Animal.accepts_nested_attributes_for \
                     :person,
-                    :update_only => true,
-                    :allow_destroy => true
+                    update_only: true,
+                    allow_destroy: true
                 end
 
                 context "when the id matches" do
 
                   before do
                     animal.person_attributes =
-                      { :id => person.id, :title => "Madam" }
+                      { id: person.id, title: "Madam" }
                   end
 
                   it "updates the existing document" do
@@ -810,7 +810,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     animal.person_attributes =
-                      { :id => BSON::ObjectId.new.to_s, :title => "Madam" }
+                      { id: BSON::ObjectId.new.to_s, title: "Madam" }
                   end
 
                   it "updates the existing document" do
@@ -822,7 +822,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     animal.person_attributes =
-                      { :id => person.id, :title => "Madam", :_destroy => "true" }
+                      { id: person.id, title: "Madam", _destroy: "true" }
                   end
 
                   it "deletes the existing document" do
@@ -836,7 +836,7 @@ describe Mongoid::NestedAttributes do
           context "when the nested document is invalid" do
 
             before do
-              animal.person_attributes = { :ssn => '$$$' }
+              animal.person_attributes = { ssn: '$$$' }
             end
 
             it "does not propagate invalidity to parent" do
@@ -853,7 +853,7 @@ describe Mongoid::NestedAttributes do
           end
 
           before do
-            tool.palette_attributes ={ :_type => "BigPalette" }
+            tool.palette_attributes ={ _type: "BigPalette" }
           end
 
           it "instantiates an object of the given type" do
@@ -917,26 +917,26 @@ describe Mongoid::NestedAttributes do
         end
 
         let(:address_one) do
-          Address.new(:street => "Unter den Linden")
+          Address.new(street: "Unter den Linden")
         end
 
         let(:address_two) do
-          Address.new(:street => "Kurfeurstendamm")
+          Address.new(street: "Kurfeurstendamm")
         end
 
         let(:phone_one) do
-          ParanoidPhone.new(:number => "1")
+          ParanoidPhone.new(number: "1")
         end
 
         let(:phone_two) do
-          ParanoidPhone.new(:number => "2")
+          ParanoidPhone.new(number: "2")
         end
 
         context "when a limit is specified" do
 
           before(:all) do
             Person.send(:undef_method, :addresses_attributes=)
-            Person.accepts_nested_attributes_for :addresses, :limit => 2
+            Person.accepts_nested_attributes_for :addresses, limit: 2
           end
 
           after(:all) do
@@ -1107,8 +1107,8 @@ describe Mongoid::NestedAttributes do
               before do
                 person.addresses_attributes =
                   [
-                    { :_id => address_one.id, "street" => "Maybachufer" },
-                    { :_id => address_two.id, "street" => "Alexander Platz" }
+                    { _id: address_one.id, "street" => "Maybachufer" },
+                    { _id: address_two.id, "street" => "Alexander Platz" }
                   ]
               end
 
@@ -1130,8 +1130,8 @@ describe Mongoid::NestedAttributes do
               before do
                 person.addresses_attributes =
                   [
-                    { :id => address_one.id, "street" => "Maybachufer" },
-                    { :id => address_two.id, "street" => "Alexander Platz" }
+                    { id: address_one.id, "street" => "Maybachufer" },
+                    { id: address_two.id, "street" => "Alexander Platz" }
                   ]
               end
 
@@ -1169,7 +1169,7 @@ describe Mongoid::NestedAttributes do
 
                   before(:all) do
                     Person.send(:undef_method, :addresses_attributes=)
-                    Person.accepts_nested_attributes_for :addresses, :allow_destroy => true
+                    Person.accepts_nested_attributes_for :addresses, allow_destroy: true
                   end
 
                   after(:all) do
@@ -1344,7 +1344,7 @@ describe Mongoid::NestedAttributes do
                   before(:all) do
                     Person.send(:undef_method, :paranoid_phones_attributes=)
                     Person.accepts_nested_attributes_for :paranoid_phones,
-                      :allow_destroy => true
+                      allow_destroy: true
                   end
 
                   after(:all) do
@@ -1424,7 +1424,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :addresses_attributes=)
-                  Person.accepts_nested_attributes_for :addresses, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :addresses, allow_destroy: false
                 end
 
                 after(:all) do
@@ -1583,7 +1583,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :addresses_attributes=)
               Person.accepts_nested_attributes_for \
-                :addresses, :reject_if => lambda { |attrs| attrs["street"].blank? }
+                :addresses, reject_if: ->(attrs){ attrs["street"].blank? }
             end
 
             after(:all) do
@@ -1625,7 +1625,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :addresses_attributes=)
               Person.accepts_nested_attributes_for \
-                :addresses, :reject_if => :all_blank
+                :addresses, reject_if: :all_blank
             end
 
             after(:all) do
@@ -1668,7 +1668,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :addresses_attributes=)
-                Person.accepts_nested_attributes_for :addresses, :allow_destroy => true
+                Person.accepts_nested_attributes_for :addresses, allow_destroy: true
               end
 
               after(:all) do
@@ -1729,7 +1729,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :addresses_attributes=)
-                Person.accepts_nested_attributes_for :addresses, :allow_destroy => false
+                Person.accepts_nested_attributes_for :addresses, allow_destroy: false
               end
 
               after(:all) do
@@ -1856,7 +1856,7 @@ describe Mongoid::NestedAttributes do
 
           before do
             person.addresses_attributes = {
-              "0" => { :street => '123' }
+              "0" => { street: '123' }
             }
           end
 
@@ -1899,7 +1899,7 @@ describe Mongoid::NestedAttributes do
           before(:all) do
             Person.send(:undef_method, :game_attributes=)
             Person.accepts_nested_attributes_for \
-              :game, :reject_if => lambda { |attrs| attrs[:name].blank? }
+              :game, reject_if: ->(attrs){ attrs[:name].blank? }
           end
 
           after(:all) do
@@ -1910,7 +1910,7 @@ describe Mongoid::NestedAttributes do
           context "when the attributes match" do
 
             before do
-              person.game_attributes = { :score => 10 }
+              person.game_attributes = { score: 10 }
             end
 
             it "does not add the document" do
@@ -1921,7 +1921,7 @@ describe Mongoid::NestedAttributes do
           context "when the attributes do not match" do
 
             before do
-              person.game_attributes = { :name => "Tron" }
+              person.game_attributes = { name: "Tron" }
             end
 
             it "adds the document" do
@@ -1935,7 +1935,7 @@ describe Mongoid::NestedAttributes do
           before(:all) do
             Person.send(:undef_method, :game_attributes=)
             Person.accepts_nested_attributes_for \
-              :game, :reject_if => :all_blank
+              :game, reject_if: :all_blank
           end
 
           after(:all) do
@@ -1946,7 +1946,7 @@ describe Mongoid::NestedAttributes do
           context "when all attributes are empty" do
 
             before do
-              person.game_attributes = { :score => nil }
+              person.game_attributes = { score: nil }
             end
 
             it "does not add the document" do
@@ -1957,7 +1957,7 @@ describe Mongoid::NestedAttributes do
           context "when an attribute is non-empty" do
 
             before do
-              person.game_attributes = { :name => "Tron" }
+              person.game_attributes = { name: "Tron" }
             end
 
             it "adds the document" do
@@ -1971,7 +1971,7 @@ describe Mongoid::NestedAttributes do
           context "with no destroy attribute" do
 
             before do
-              person.game_attributes = { :name => "Tron" }
+              person.game_attributes = { name: "Tron" }
             end
 
             it "builds a new document" do
@@ -1985,7 +1985,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :game_attributes=)
-                Person.accepts_nested_attributes_for :game, :allow_destroy => true
+                Person.accepts_nested_attributes_for :game, allow_destroy: true
               end
 
               after(:all) do
@@ -1994,7 +1994,7 @@ describe Mongoid::NestedAttributes do
               end
 
               before do
-                person.game_attributes = { :name => "Tron", :_destroy => "1" }
+                person.game_attributes = { name: "Tron", _destroy: "1" }
               end
 
               it "does not build the document" do
@@ -2006,7 +2006,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :game_attributes=)
-                Person.accepts_nested_attributes_for :game, :allow_destroy => false
+                Person.accepts_nested_attributes_for :game, allow_destroy: false
               end
 
               after(:all) do
@@ -2015,7 +2015,7 @@ describe Mongoid::NestedAttributes do
               end
 
               before do
-                person.game_attributes = { :name => "Tron", :_destroy => "1" }
+                person.game_attributes = { name: "Tron", _destroy: "1" }
               end
 
               it "builds the document" do
@@ -2040,8 +2040,8 @@ describe Mongoid::NestedAttributes do
             context "with no destroy attribute" do
 
               before do
-                person.game = Game.new(:name => "Tron")
-                person.game_attributes = { :name => "Pong" }
+                person.game = Game.new(name: "Tron")
+                person.game_attributes = { name: "Pong" }
               end
 
               it "replaces the document" do
@@ -2052,12 +2052,12 @@ describe Mongoid::NestedAttributes do
             context "when updating attributes" do
 
               let!(:pizza) do
-                Pizza.create(:name => "large")
+                Pizza.create(name: "large")
               end
 
               before do
-                pizza.topping = Topping.create(:name => "cheese")
-                pizza.update_attributes(:topping_attributes => { :name => "onions" })
+                pizza.topping = Topping.create(name: "cheese")
+                pizza.update_attributes(topping_attributes: { name: "onions" })
               end
 
               it "persists the attribute changes" do
@@ -2071,7 +2071,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :game_attributes=)
-                  Person.accepts_nested_attributes_for :game, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :game, allow_destroy: true
                 end
 
                 after(:all) do
@@ -2080,8 +2080,8 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  person.game = Game.new(:name => "Tron")
-                  person.game_attributes = { :name => "Pong", :_destroy => "1" }
+                  person.game = Game.new(name: "Tron")
+                  person.game_attributes = { name: "Pong", _destroy: "1" }
                 end
 
                 it "does not replace the document" do
@@ -2093,7 +2093,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :game_attributes=)
-                  Person.accepts_nested_attributes_for :game, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :game, allow_destroy: false
                 end
 
                 after(:all) do
@@ -2102,8 +2102,8 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  person.game = Game.new(:name => "Tron")
-                  person.game_attributes = { :name => "Pong", :_destroy => "1" }
+                  person.game = Game.new(name: "Tron")
+                  person.game_attributes = { name: "Pong", _destroy: "1" }
                 end
 
                 it "replaces the document" do
@@ -2119,7 +2119,7 @@ describe Mongoid::NestedAttributes do
           context "when there is an existing record" do
 
             let(:game) do
-              Game.new(:name => "Tron")
+              Game.new(name: "Tron")
             end
 
             before do
@@ -2132,7 +2132,7 @@ describe Mongoid::NestedAttributes do
 
                 before do
                   person.game_attributes =
-                    { :id => game.id, :name => "Pong" }
+                    { id: game.id, name: "Pong" }
                 end
 
                 it "updates the existing document" do
@@ -2156,7 +2156,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :game_attributes=)
-                  Person.accepts_nested_attributes_for :game, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :game, allow_destroy: true
                 end
 
                 after(:all) do
@@ -2170,7 +2170,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       person.game_attributes =
-                        { :id => game.id, :_destroy => truth }
+                        { id: game.id, _destroy: truth }
                     end
 
                     it "destroys the existing document" do
@@ -2185,7 +2185,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       person.game_attributes =
-                        { :id => game.id, :_destroy => falsehood }
+                        { id: game.id, _destroy: falsehood }
                     end
 
                     it "does not destroy the existing document" do
@@ -2199,7 +2199,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :game_attributes=)
-                  Person.accepts_nested_attributes_for :game, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :game, allow_destroy: false
                 end
 
                 after(:all) do
@@ -2211,7 +2211,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.game_attributes =
-                      { :id => game.id, :_destroy => true }
+                      { id: game.id, _destroy: true }
                   end
 
                   it "does not destroy the document" do
@@ -2226,8 +2226,8 @@ describe Mongoid::NestedAttributes do
                   Person.send(:undef_method, :game_attributes=)
                   Person.accepts_nested_attributes_for \
                     :game,
-                    :update_only => true,
-                    :allow_destroy => true
+                    update_only: true,
+                    allow_destroy: true
                 end
 
                 after(:all) do
@@ -2239,7 +2239,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.game_attributes =
-                      { :id => game.id, :name => "Donkey Kong" }
+                      { id: game.id, name: "Donkey Kong" }
                   end
 
                   it "updates the existing document" do
@@ -2251,7 +2251,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.game_attributes =
-                      { :id => BSON::ObjectId.new.to_s, :name => "Pong" }
+                      { id: BSON::ObjectId.new.to_s, name: "Pong" }
                   end
 
                   it "updates the existing document" do
@@ -2263,7 +2263,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     person.game_attributes =
-                      { :id => game.id, :_destroy => true }
+                      { id: game.id, _destroy: true }
                   end
 
                   it "destroys the existing document" do
@@ -2278,7 +2278,7 @@ describe Mongoid::NestedAttributes do
         context "when the nested document is invalid" do
 
           before do
-            person.game_attributes = { :name => '$$$' }
+            person.game_attributes = { name: '$$$' }
           end
 
           it "propagates invalidity to parent" do
@@ -2318,7 +2318,7 @@ describe Mongoid::NestedAttributes do
             context "when no destroy attribute passed" do
 
               before do
-                game.person_attributes = { :title => "Sir" }
+                game.person_attributes = { title: "Sir" }
               end
 
               it "builds a new document" do
@@ -2333,7 +2333,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Game.send(:undef_method, :person_attributes=)
-                  Game.accepts_nested_attributes_for :person, :allow_destroy => true
+                  Game.accepts_nested_attributes_for :person, allow_destroy: true
                 end
 
                 after(:all) do
@@ -2342,7 +2342,7 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  game.person_attributes = { :title => "Sir", :_destroy => 1 }
+                  game.person_attributes = { title: "Sir", _destroy: 1 }
                 end
 
                 it "does not build a new document" do
@@ -2354,7 +2354,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Game.send(:undef_method, :person_attributes=)
-                  Game.accepts_nested_attributes_for :person, :allow_destroy => false
+                  Game.accepts_nested_attributes_for :person, allow_destroy: false
                 end
 
                 after(:all) do
@@ -2363,7 +2363,7 @@ describe Mongoid::NestedAttributes do
                 end
 
                 before do
-                  game.person_attributes = { :title => "Sir", :_destroy => 1 }
+                  game.person_attributes = { title: "Sir", _destroy: 1 }
                 end
 
                 it "builds a new document" do
@@ -2384,7 +2384,7 @@ describe Mongoid::NestedAttributes do
               context "when the id matches" do
 
                 before do
-                  game.person_attributes = { :id => person.id, :title => "Sir" }
+                  game.person_attributes = { id: person.id, title: "Sir" }
                 end
 
                 it "updates the existing document" do
@@ -2403,7 +2403,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Game.send(:undef_method, :person_attributes=)
-                  Game.accepts_nested_attributes_for :person, :allow_destroy => true
+                  Game.accepts_nested_attributes_for :person, allow_destroy: true
                 end
 
                 after(:all) do
@@ -2417,7 +2417,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       game.person_attributes =
-                        { :id => person.id, :_destroy => truth }
+                        { id: person.id, _destroy: truth }
                     end
 
                     it "destroys the existing document" do
@@ -2432,7 +2432,7 @@ describe Mongoid::NestedAttributes do
 
                     before do
                       game.person_attributes =
-                        { :id => person.id, :_destroy => falsehood }
+                        { id: person.id, _destroy: falsehood }
                     end
 
                     it "does not destroy the existing document" do
@@ -2446,7 +2446,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Game.send(:undef_method, :person_attributes=)
-                  Game.accepts_nested_attributes_for :person, :allow_destroy => false
+                  Game.accepts_nested_attributes_for :person, allow_destroy: false
                 end
 
                 after(:all) do
@@ -2458,7 +2458,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     game.person_attributes =
-                      { :id => person.id, :_destroy => true }
+                      { id: person.id, _destroy: true }
                   end
 
                   it "does not delete the document" do
@@ -2473,15 +2473,15 @@ describe Mongoid::NestedAttributes do
                   Game.send(:undef_method, :person_attributes=)
                   Game.accepts_nested_attributes_for \
                     :person,
-                    :update_only => true,
-                    :allow_destroy => true
+                    update_only: true,
+                    allow_destroy: true
                 end
 
                 context "when the id matches" do
 
                   before do
                     game.person_attributes =
-                      { :id => person.id, :title => "Madam" }
+                      { id: person.id, title: "Madam" }
                   end
 
                   it "updates the existing document" do
@@ -2493,7 +2493,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     game.person_attributes =
-                      { :id => BSON::ObjectId.new.to_s, :title => "Madam" }
+                      { id: BSON::ObjectId.new.to_s, title: "Madam" }
                   end
 
                   it "updates the existing document" do
@@ -2505,7 +2505,7 @@ describe Mongoid::NestedAttributes do
 
                   before do
                     game.person_attributes =
-                      { :id => person.id, :title => "Madam", :_destroy => "true" }
+                      { id: person.id, title: "Madam", _destroy: "true" }
                   end
 
                   it "deletes the existing document" do
@@ -2518,7 +2518,7 @@ describe Mongoid::NestedAttributes do
 
           context "when the nested document is invalid" do
             before do
-              game.person_attributes = { :ssn => '$$$' }
+              game.person_attributes = { ssn: '$$$' }
             end
 
             it "propagates invalidity to parent" do
@@ -2553,18 +2553,18 @@ describe Mongoid::NestedAttributes do
         end
 
         let(:post_one) do
-          Post.new(:title => "First post")
+          Post.new(title: "First post")
         end
 
         let(:post_two) do
-          Post.new(:title => "First response")
+          Post.new(title: "First response")
         end
 
         context "when a limit is specified" do
 
           before(:all) do
             Person.send(:undef_method, :posts_attributes=)
-            Person.accepts_nested_attributes_for :posts, :limit => 2
+            Person.accepts_nested_attributes_for :posts, limit: 2
           end
 
           after(:all) do
@@ -2685,7 +2685,7 @@ describe Mongoid::NestedAttributes do
 
                 before do
                   Person.send(:undef_method, :posts_attributes=)
-                  Person.accepts_nested_attributes_for :posts, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :posts, allow_destroy: true
                 end
 
                 after do
@@ -2748,7 +2748,7 @@ describe Mongoid::NestedAttributes do
 
                 before do
                   Person.send(:undef_method, :posts_attributes=)
-                  Person.accepts_nested_attributes_for :posts, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :posts, allow_destroy: false
                 end
 
                 after do
@@ -2970,7 +2970,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :posts_attributes=)
               Person.accepts_nested_attributes_for \
-                :posts, :reject_if => lambda { |attrs| attrs["title"].blank? }
+                :posts, reject_if: ->(attrs){ attrs["title"].blank? }
             end
 
             after(:all) do
@@ -3012,7 +3012,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :posts_attributes=)
               Person.accepts_nested_attributes_for \
-                :posts, :reject_if => :all_blank
+                :posts, reject_if: :all_blank
             end
 
             after(:all) do
@@ -3055,7 +3055,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :posts_attributes=)
-                Person.accepts_nested_attributes_for :posts, :allow_destroy => true
+                Person.accepts_nested_attributes_for :posts, allow_destroy: true
               end
 
               after(:all) do
@@ -3116,7 +3116,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :posts_attributes=)
-                Person.accepts_nested_attributes_for :posts, :allow_destroy => false
+                Person.accepts_nested_attributes_for :posts, allow_destroy: false
               end
 
               after(:all) do
@@ -3243,7 +3243,7 @@ describe Mongoid::NestedAttributes do
 
           before do
             person.posts_attributes = {
-              "0" => { :title => "$$$" }
+              "0" => { title: "$$$" }
             }
           end
 
@@ -3282,18 +3282,18 @@ describe Mongoid::NestedAttributes do
         end
 
         let(:preference_one) do
-          Preference.new(:name => "First preference")
+          Preference.new(name: "First preference")
         end
 
         let(:preference_two) do
-          Preference.new(:name => "First response")
+          Preference.new(name: "First response")
         end
 
         context "when a limit is specified" do
 
           before(:all) do
             Person.send(:undef_method, :preferences_attributes=)
-            Person.accepts_nested_attributes_for :preferences, :limit => 2
+            Person.accepts_nested_attributes_for :preferences, limit: 2
           end
 
           after(:all) do
@@ -3394,7 +3394,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :preferences_attributes=)
-                  Person.accepts_nested_attributes_for :preferences, :allow_destroy => true
+                  Person.accepts_nested_attributes_for :preferences, allow_destroy: true
                 end
 
                 after(:all) do
@@ -3457,7 +3457,7 @@ describe Mongoid::NestedAttributes do
 
                 before(:all) do
                   Person.send(:undef_method, :preferences_attributes=)
-                  Person.accepts_nested_attributes_for :preferences, :allow_destroy => false
+                  Person.accepts_nested_attributes_for :preferences, allow_destroy: false
                 end
 
                 after(:all) do
@@ -3628,7 +3628,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :preferences_attributes=)
               Person.accepts_nested_attributes_for \
-                :preferences, :reject_if => lambda { |attrs| attrs["name"].blank? }
+                :preferences, reject_if: ->(attrs){ attrs["name"].blank? }
             end
 
             after(:all) do
@@ -3670,7 +3670,7 @@ describe Mongoid::NestedAttributes do
             before(:all) do
               Person.send(:undef_method, :preferences_attributes=)
               Person.accepts_nested_attributes_for \
-                :preferences, :reject_if => :all_blank
+                :preferences, reject_if: :all_blank
             end
 
             after(:all) do
@@ -3713,7 +3713,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :preferences_attributes=)
-                Person.accepts_nested_attributes_for :preferences, :allow_destroy => true
+                Person.accepts_nested_attributes_for :preferences, allow_destroy: true
               end
 
               after(:all) do
@@ -3774,7 +3774,7 @@ describe Mongoid::NestedAttributes do
 
               before(:all) do
                 Person.send(:undef_method, :preferences_attributes=)
-                Person.accepts_nested_attributes_for :preferences, :allow_destroy => false
+                Person.accepts_nested_attributes_for :preferences, allow_destroy: false
               end
 
               after(:all) do
@@ -3900,7 +3900,7 @@ describe Mongoid::NestedAttributes do
         context "when the nested document is invalid" do
           before do
             person.preferences_attributes = {
-              "0" => { :name => 'x' }
+              "0" => { name: 'x' }
             }
           end
 
@@ -3927,13 +3927,13 @@ describe Mongoid::NestedAttributes do
       end
 
       let!(:service) do
-        person.services.create(:sid => "123")
+        person.services.create(sid: "123")
       end
 
       let(:attributes) do
-        { :services_attributes =>
+        { services_attributes:
           { "0" =>
-            { :_id => service.id, :sid => service.sid, :_destroy => 1 }
+            { _id: service.id, sid: service.sid, _destroy: 1 }
           }
         }
       end
@@ -3972,11 +3972,11 @@ describe Mongoid::NestedAttributes do
       context "when second level is a one to many" do
 
         let(:attributes) do
-          { :addresses_attributes =>
+          { addresses_attributes:
             { "0" =>
               {
-                :street => "Alexanderstr",
-                :locations_attributes => { "0" => { :name => "Home" } }
+                street: "Alexanderstr",
+                locations_attributes: { "0" => { name: "Home" } }
               }
             }
           }
@@ -4008,11 +4008,11 @@ describe Mongoid::NestedAttributes do
         context "when the nested document is new" do
 
           let(:attributes) do
-            { :addresses_attributes =>
+            { addresses_attributes:
               { "0" =>
                 {
-                  :street => "Alexanderstr",
-                  :code_attributes => { :name => "Home" }
+                  street: "Alexanderstr",
+                  code_attributes: { name: "Home" }
                 }
               }
             }
@@ -4045,22 +4045,22 @@ describe Mongoid::NestedAttributes do
         context "when the nested document is not polymorphic" do
 
           let!(:address) do
-            person.addresses.create(:street => "Alexanderstr", :number => 1)
+            person.addresses.create(street: "Alexanderstr", number: 1)
           end
 
           let!(:code) do
-            address.create_code(:name => "Home")
+            address.create_code(name: "Home")
           end
 
           let(:attributes) do
-            { :addresses_attributes =>
+            { addresses_attributes:
               { "0" =>
                 {
-                  :_id => address.id,
-                  :number => 45,
-                  :code_attributes => {
-                    :_id => code.id,
-                    :name => "Work"
+                  _id: address.id,
+                  number: 45,
+                  code_attributes: {
+                    _id: code.id,
+                    name: "Work"
                   }
                 }
               }
@@ -4085,22 +4085,22 @@ describe Mongoid::NestedAttributes do
           context "when the first level is an embeds many" do
 
             let!(:address) do
-              person.addresses.create(:street => "Alexanderstr", :number => 1)
+              person.addresses.create(street: "Alexanderstr", number: 1)
             end
 
             let!(:target) do
-              address.create_target(:name => "test")
+              address.create_target(name: "test")
             end
 
             let(:attributes) do
-              { :addresses_attributes =>
+              { addresses_attributes:
                 { "0" =>
                   {
-                    :_id => address.id,
-                    :number => 45,
-                    :target_attributes => {
-                      :_id => target.id,
-                      :name => "updated"
+                    _id: address.id,
+                    number: 45,
+                    target_attributes: {
+                      _id: target.id,
+                      name: "updated"
                     }
                   }
                 }
@@ -4125,19 +4125,19 @@ describe Mongoid::NestedAttributes do
             context "when the id is passed as a string" do
 
               let!(:name) do
-                person.create_name(:first_name => "john", :last_name => "doe")
+                person.create_name(first_name: "john", last_name: "doe")
               end
 
               let!(:language) do
-                name.create_language(:name => "english")
+                name.create_language(name: "english")
               end
 
               let(:attributes) do
-                { :name_attributes =>
+                { name_attributes:
                   {
-                    :language_attributes => {
-                      :_id => language.id.to_s,
-                      :name => "deutsch"
+                    language_attributes: {
+                      _id: language.id.to_s,
+                      name: "deutsch"
                     }
                   }
                 }
@@ -4163,12 +4163,12 @@ describe Mongoid::NestedAttributes do
       end
 
       let!(:division) do
-        league.divisions.create(:name => "Old Name")
+        league.divisions.create(name: "Old Name")
       end
 
       let(:params) do
-        { :divisions_attributes =>
-          { "0" => { :id => division.id.to_s, :name => "New Name" }}
+        { divisions_attributes:
+          { "0" => { id: division.id.to_s, name: "New Name" }}
         }
       end
 
@@ -4187,8 +4187,8 @@ describe Mongoid::NestedAttributes do
         end
 
         let(:new_params) do
-          { :divisions_attributes =>
-            { "0" => { :id => division.id.to_s, :name => "Name" }}
+          { divisions_attributes:
+            { "0" => { id: division.id.to_s, name: "Name" }}
           }
         end
 

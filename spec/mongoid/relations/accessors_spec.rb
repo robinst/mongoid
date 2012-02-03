@@ -13,7 +13,7 @@ describe Mongoid::Relations::Accessors do
       context "when the relation is a many to many" do
 
         let!(:preference) do
-          Preference.create(:name => "Setting")
+          Preference.create(name: "Setting")
         end
 
         before do
@@ -65,7 +65,7 @@ describe Mongoid::Relations::Accessors do
       context "when the relation is a many to one" do
 
         let!(:post) do
-          Post.create(:title => "First!")
+          Post.create(title: "First!")
         end
 
         before do
@@ -117,7 +117,7 @@ describe Mongoid::Relations::Accessors do
       context "when the relation is a references one" do
 
         let!(:game) do
-          Game.create(:name => "Centipeded")
+          Game.create(name: "Centipeded")
         end
 
         before do
@@ -172,25 +172,25 @@ describe Mongoid::Relations::Accessors do
       context "when there's a single references many/one" do
         
         let(:movie) do
-          Movie.create(:title => "Inception")
+          Movie.create(title: "Inception")
         end
 
         let(:book) do
-          Book.create(:title => "Jurassic Park")
+          Book.create(title: "Jurassic Park")
         end
 
         let!(:movie_rating) do
-          movie.ratings.create(:value => 10)
+          movie.ratings.create(value: 10)
         end
 
         let!(:book_rating) do
-          book.create_rating(:value => 5)
+          book.create_rating(value: 5)
         end
 
         context "when accessing a referenced in" do
 
           let(:rating) do
-            Rating.where(:value => 10).first
+            Rating.where(value: 10).first
           end
 
           it "returns the correct type" do
@@ -236,25 +236,25 @@ describe Mongoid::Relations::Accessors do
         end
 
         let!(:face_left_eye) do
-          face.create_left_eye(:pupil_dilation => 10)
+          face.create_left_eye(pupil_dilation: 10)
         end
         
         let!(:face_right_eye) do
-          face.create_right_eye(:pupil_dilation => 5)
+          face.create_right_eye(pupil_dilation: 5)
         end
 
         let!(:eye_bowl_blue_eye) do
-          eye_bowl.blue_eyes.create(:pupil_dilation => 2)
+          eye_bowl.blue_eyes.create(pupil_dilation: 2)
         end
         
         let!(:eye_bowl_brown_eye) do
-          eye_bowl.brown_eyes.create(:pupil_dilation => 1)
+          eye_bowl.brown_eyes.create(pupil_dilation: 1)
         end
 
         context "when accessing a referenced in" do
 
           let(:eye) do
-            Eye.where(:pupil_dilation => 10).first
+            Eye.where(pupil_dilation: 10).first
           end
 
           it "returns the correct type" do

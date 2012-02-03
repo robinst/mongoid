@@ -7,7 +7,7 @@ describe Mongoid::Criterion::Scoping do
     context "when a default scope exists" do
 
       let(:criteria) do
-        Mongoid::Criteria.new(Acolyte).where(:name => "first")
+        Mongoid::Criteria.new(Acolyte).where(name: "first")
       end
 
       context "when the default scope has not been applied" do
@@ -17,7 +17,7 @@ describe Mongoid::Criterion::Scoping do
         end
 
         it "fuses the default scope" do
-          applied.options.should eq({ :sort => [[ :name, :asc ]]})
+          applied.options.should eq({ sort: [[ :name, :asc ]]})
         end
 
         it "contains the same original criterion" do
@@ -70,7 +70,7 @@ describe Mongoid::Criterion::Scoping do
     context "when a default scope exists" do
 
       let(:criteria) do
-        Mongoid::Criteria.new(Acolyte).where(:name => "first")
+        Mongoid::Criteria.new(Acolyte).where(name: "first")
       end
 
       context "when the default scope has not been applied" do
@@ -80,7 +80,7 @@ describe Mongoid::Criterion::Scoping do
         end
 
         it "fuses the default scope" do
-          applied.options.should eq({ :sort => [[ :name, :asc ]]})
+          applied.options.should eq({ sort: [[ :name, :asc ]]})
         end
 
         it "contains the same original criterion" do
@@ -118,7 +118,7 @@ describe Mongoid::Criterion::Scoping do
         end
 
         it "fuses the default scope" do
-          applied.options.should eq({ :sort => [[ :name, :asc ]]})
+          applied.options.should eq({ sort: [[ :name, :asc ]]})
         end
 
         it "clears the criteria scoping" do
@@ -141,7 +141,7 @@ describe Mongoid::Criterion::Scoping do
     context "when a default scope exists" do
 
       let(:criteria) do
-        Mongoid::Criteria.new(Acolyte).where(:name => "first")
+        Mongoid::Criteria.new(Acolyte).where(name: "first")
       end
 
       context "when the default scope has been applied" do

@@ -12,9 +12,9 @@ describe Mongoid::Relations::Cascading do
 
       let(:metadata) do
         Mongoid::Relations::Metadata.new(
-          :name => :posts,
-          :dependent => :destroy,
-          :relation => Mongoid::Relations::Referenced::Many
+          name: :posts,
+          dependent: :destroy,
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -35,8 +35,8 @@ describe Mongoid::Relations::Cascading do
 
       let(:metadata) do
         Mongoid::Relations::Metadata.new(
-          :name => :posts,
-          :relation => Mongoid::Relations::Referenced::Many
+          name: :posts,
+          relation: Mongoid::Relations::Referenced::Many
         )
       end
 
@@ -67,7 +67,7 @@ describe Mongoid::Relations::Cascading do
           end
 
           let!(:post) do
-            person.posts.create(:title => "Testing")
+            person.posts.create(title: "Testing")
           end
 
           before do
@@ -88,7 +88,7 @@ describe Mongoid::Relations::Cascading do
           end
 
           let!(:game) do
-            person.create_game(:name => "Pong")
+            person.create_game(name: "Pong")
           end
 
           before do
@@ -107,11 +107,11 @@ describe Mongoid::Relations::Cascading do
           context "when nullifying a references many" do
 
             let(:movie) do
-              Movie.create(:title => "Bladerunner")
+              Movie.create(title: "Bladerunner")
             end
 
             let!(:rating) do
-              movie.ratings.create(:value => 10)
+              movie.ratings.create(value: 10)
             end
 
             let(:from_db) do
@@ -132,11 +132,11 @@ describe Mongoid::Relations::Cascading do
             context "when the relation exists" do
 
               let(:book) do
-                Book.create(:title => "Neuromancer")
+                Book.create(title: "Neuromancer")
               end
 
               let!(:rating) do
-                book.create_rating(:value => 10)
+                book.create_rating(value: 10)
               end
 
               let(:from_db) do
@@ -155,7 +155,7 @@ describe Mongoid::Relations::Cascading do
             context "when the relation is nil" do
 
               let(:book) do
-                Book.create(:title => "Neuromancer")
+                Book.create(title: "Neuromancer")
               end
 
               it "returns nil" do
@@ -171,7 +171,7 @@ describe Mongoid::Relations::Cascading do
             end
 
             let!(:preference) do
-              person.preferences.create(:name => "Setting")
+              person.preferences.create(name: "Setting")
             end
 
             let(:from_db) do

@@ -57,7 +57,7 @@ describe Mongoid::Relations::Synchronization do
       context "check for existing Agent, then Persisted" do
 
         before do
-          account.agents.where(:_id => agent.id).exists?
+          account.agents.where(_id: agent.id).exists?
         end
 
         it "is able to :save" do
@@ -70,7 +70,7 @@ describe Mongoid::Relations::Synchronization do
   context "when the inverse of is nil" do
 
     let(:preference) do
-      Preference.new(:name => "test")
+      Preference.new(name: "test")
     end
 
     let(:article) do
@@ -97,7 +97,7 @@ describe Mongoid::Relations::Synchronization do
     end
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     before do
@@ -115,7 +115,7 @@ describe Mongoid::Relations::Synchronization do
     context "when subsequently setting with keys" do
 
       let!(:two) do
-        Preference.create(:name => "two")
+        Preference.create(name: "two")
       end
 
       before do
@@ -136,11 +136,11 @@ describe Mongoid::Relations::Synchronization do
     end
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     let!(:two) do
-      Preference.create(:name => "two")
+      Preference.create(name: "two")
     end
 
     before do
@@ -185,19 +185,19 @@ describe Mongoid::Relations::Synchronization do
   context "when replacing ids" do
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     let!(:two) do
-      Preference.create(:name => "two")
+      Preference.create(name: "two")
     end
 
     let!(:person) do
-      Person.create(:preference_ids => [ one.id, two.id ])
+      Person.create(preference_ids: [ one.id, two.id ])
     end
 
     let!(:three) do
-      Preference.create(:name => "three")
+      Preference.create(name: "three")
     end
 
     before do
@@ -250,15 +250,15 @@ describe Mongoid::Relations::Synchronization do
   context "when setting ids to empty" do
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     let!(:two) do
-      Preference.create(:name => "two")
+      Preference.create(name: "two")
     end
 
     let!(:person) do
-      Person.create(:preference_ids => [ one.id, two.id ])
+      Person.create(preference_ids: [ one.id, two.id ])
     end
 
     before do
@@ -303,15 +303,15 @@ describe Mongoid::Relations::Synchronization do
   context "when setting ids to nil" do
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     let!(:two) do
-      Preference.create(:name => "two")
+      Preference.create(name: "two")
     end
 
     let!(:person) do
-      Person.create(:preference_ids => [ one.id, two.id ])
+      Person.create(preference_ids: [ one.id, two.id ])
     end
 
     before do
@@ -356,15 +356,15 @@ describe Mongoid::Relations::Synchronization do
   context "when destroying" do
 
     let!(:one) do
-      Preference.create(:name => "one")
+      Preference.create(name: "one")
     end
 
     let!(:two) do
-      Preference.create(:name => "two")
+      Preference.create(name: "two")
     end
 
     let!(:person) do
-      Person.create(:preferences => [ one, two ])
+      Person.create(preferences: [ one, two ])
     end
 
     context "when destroying the parent" do

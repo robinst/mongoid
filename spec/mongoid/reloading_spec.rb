@@ -30,7 +30,7 @@ describe Mongoid::Reloading do
     context "when using string ids" do
 
       let(:account) do
-        Account.create(:name => "bank", :number => "1000")
+        Account.create(name: "bank", number: "1000")
       end
 
       let!(:from_db) do
@@ -53,7 +53,7 @@ describe Mongoid::Reloading do
     context "when an after initialize callback is defined" do
 
       let!(:book) do
-        Book.create(:title => "Snow Crash")
+        Book.create(title: "Snow Crash")
       end
 
       before do
@@ -87,7 +87,9 @@ describe Mongoid::Reloading do
       context "when raising not found error" do
 
         it "raises an error" do
-          lambda { Person.new.reload }.should raise_error(Mongoid::Errors::DocumentNotFound)
+          expect {
+            Person.new.reload
+          }.to raise_error(Mongoid::Errors::DocumentNotFound)
         end
       end
     end
@@ -103,13 +105,13 @@ describe Mongoid::Reloading do
         context "when the relation is an embeds many" do
 
           let!(:address) do
-            person.addresses.create(:street => "Abbey Road", :number => 4)
+            person.addresses.create(street: "Abbey Road", number: 4)
           end
 
           before do
-            Person.collection.update(
-              { "_id" => person.id }, { "$set" => { "addresses.0.number" => 3 }}
-            )
+            Person.collection.find(
+              { "_id" => person.id }
+            ).update({ "$set" => { "addresses.0.number" => 3 }})
           end
 
           let!(:reloaded) do
@@ -128,13 +130,12 @@ describe Mongoid::Reloading do
         context "when the relation is an embeds one" do
 
           let!(:name) do
-            person.create_name(:first_name => "Syd")
+            person.create_name(first_name: "Syd")
           end
 
           before do
-            Person.collection.update(
-              { "_id" => person.id }, { "$set" => { "name.last_name" => "Vicious" }}
-            )
+            Person.collection.find({ "_id" => person.id }).
+              update({ "$set" => { "name.last_name" => "Vicious" }})
           end
 
           let!(:reloaded) do
@@ -154,18 +155,16 @@ describe Mongoid::Reloading do
       context "when the relation is embedded multiple levels" do
 
         let!(:address) do
-          person.addresses.create(:street => "Abbey Road", :number => 3)
+          person.addresses.create(street: "Abbey Road", number: 3)
         end
 
         let!(:location) do
-          address.locations.create(:name => "home")
+          address.locations.create(name: "home")
         end
 
         before do
-          Person.collection.update(
-            { "_id" => person.id },
-            { "$set" => { "addresses.0.locations.0.name" => "work" }}
-          )
+          Person.collection.find({ "_id" => person.id }).
+            update({ "$set" => { "addresses.0.locations.0.name" => "work" }})
         end
 
         let!(:reloaded) do
@@ -193,13 +192,12 @@ describe Mongoid::Reloading do
       end
 
       let!(:address) do
-        person.addresses.create(:number => 27, :street => "Maiden Lane")
+        person.addresses.create(number: 27, street: "Maiden Lane")
       end
 
       before do
-        Person.collection.update(
-          { "_id" => person.id }, { "$set" => { "addresses" => [] } }
-        )
+        Person.collection.find({ "_id" => person.id }).
+          update({ "$set" => { "addresses" => [] }})
         person.reload
       end
 
@@ -217,13 +215,12 @@ describe Mongoid::Reloading do
       context "for a references_one" do
 
         let!(:game) do
-          person.create_game(:score => 50)
+          person.create_game(score: 50)
         end
 
         before do
-          Game.collection.update(
-            { "_id" => game.id }, { "$set" => { "score" => 75 } }
-          )
+          Game.collection.find({ "_id" => game.id }).
+            update({ "$set" => { "score" => 75 }})
           person.reload
         end
 
@@ -235,13 +232,12 @@ describe Mongoid::Reloading do
       context "for a referenced_in" do
 
         let!(:game) do
-          person.create_game(:score => 50)
+          person.create_game(score: 50)
         end
 
         before do
-          Person.collection.update(
-            { "_id" => person.id }, { "$set" => { "title" => "Mam" } }
-          )
+          Person.collection.find({ "_id" => person.id }).
+            update({ "$set" => { "title" => "Mam" }})
           game.reload
         end
 

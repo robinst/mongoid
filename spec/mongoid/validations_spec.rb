@@ -3,17 +3,17 @@ require "spec_helper"
 describe Mongoid::Validations do
 
   let(:account) do
-    Account.new(:name => "Testing a really long name.")
+    Account.new(name: "Testing a really long name.")
   end
 
   describe "#read_attribute_for_validation" do
 
     let(:person) do
-      Person.new(:title => "Mr")
+      Person.new(title: "Mr")
     end
 
     let!(:address) do
-      person.addresses.build(:street => "Wienerstr")
+      person.addresses.build(street: "Wienerstr")
     end
 
     context "when reading a field" do
@@ -82,11 +82,11 @@ describe Mongoid::Validations do
     context "when the document is fresh from the database" do
 
       let!(:pizza) do
-        Pizza.new(:name => "chicago")
+        Pizza.new(name: "chicago")
       end
 
       before do
-        pizza.build_topping(:name => "cheese")
+        pizza.build_topping(name: "cheese")
         pizza.save
       end
 
@@ -110,7 +110,7 @@ describe Mongoid::Validations do
         context "when the child is invalid" do
 
           let(:rating) do
-            Rating.new(:value => 1000)
+            Rating.new(value: 1000)
           end
 
           before do
@@ -148,7 +148,7 @@ describe Mongoid::Validations do
         context "when the child is invalid" do
 
           let(:service) do
-            Service.new(:sid => "invalid")
+            Service.new(sid: "invalid")
           end
 
           before do
@@ -203,7 +203,7 @@ describe Mongoid::Validations do
     context "when adding via the new syntax" do
 
       before do
-        klass.validates(:name, :associated => true)
+        klass.validates(:name, associated: true)
       end
 
       it "adds the validator" do
@@ -238,7 +238,7 @@ describe Mongoid::Validations do
     context "when adding via the new syntax" do
 
       before do
-        klass.validates(:name, :uniqueness => true)
+        klass.validates(:name, uniqueness: true)
       end
 
       it "adds the validator" do
@@ -273,7 +273,7 @@ describe Mongoid::Validations do
     context "when adding via the new syntax" do
 
       before do
-        klass.validates(:name, :presence => true)
+        klass.validates(:name, presence: true)
       end
 
       it "adds the validator" do
@@ -295,7 +295,7 @@ describe Mongoid::Validations do
     context "when adding via the traditional macro" do
 
       before do
-        klass.validates_format_of(:website, :with => URI.regexp)
+        klass.validates_format_of(:website, with: URI.regexp)
       end
 
       it "adds the validator" do
@@ -308,7 +308,7 @@ describe Mongoid::Validations do
     context "when adding via the new syntax" do
 
       before do
-        klass.validates(:website, :format => { :with => URI.regexp })
+        klass.validates(:website, format: { with: URI.regexp })
       end
 
       it "adds the validator" do

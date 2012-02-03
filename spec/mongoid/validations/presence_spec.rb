@@ -9,7 +9,7 @@ describe Mongoid::Validations::PresenceValidator do
     end
 
     let(:validator) do
-      described_class.new(:attributes => product.attributes)
+      described_class.new(attributes: product.attributes)
     end
 
     context "when the field is not localized" do
@@ -216,7 +216,7 @@ describe Mongoid::Validations::PresenceValidator do
     end
 
     let(:manufacturer) do
-      Manufacturer.create!(:products => [ "Laptop", "Tablet" ])
+      Manufacturer.create!(products: [ "Laptop", "Tablet" ])
     end
 
     before do
@@ -240,7 +240,7 @@ describe Mongoid::Validations::PresenceValidator do
     end
 
     let(:manufacturer) do
-      Manufacturer.create!(:products => [ "Laptop", "Tablet" ])
+      Manufacturer.create!(products: [ "Laptop", "Tablet" ])
     end
 
     context "when retrieved, flattened and iterated" do

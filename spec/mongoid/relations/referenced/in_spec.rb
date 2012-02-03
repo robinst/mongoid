@@ -19,7 +19,7 @@ describe Mongoid::Relations::Referenced::In do
         context "when setting via create" do
 
           let(:service) do
-            person.services.create(:target => target)
+            person.services.create(target: target)
           end
 
           it "sets the target relation" do
@@ -32,11 +32,11 @@ describe Mongoid::Relations::Referenced::In do
     context "when the inverse relation has no reference defined" do
 
       let(:agent) do
-        Agent.new(:title => "007")
+        Agent.new(title: "007")
       end
 
       let(:game) do
-        Game.new(:name => "Donkey Kong")
+        Game.new(name: "Donkey Kong")
       end
 
       before do
@@ -59,11 +59,11 @@ describe Mongoid::Relations::Referenced::In do
       end
 
       let(:address) do
-        person.addresses.create(:street => "Wienerstr")
+        person.addresses.create(street: "Wienerstr")
       end
 
       let(:account) do
-        Account.create(:name => "1", :number => 1000000)
+        Account.create(name: "1", number: 1000000)
       end
 
       before do
@@ -375,11 +375,11 @@ describe Mongoid::Relations::Referenced::In do
     context "when the inverse relation has no reference defined" do
 
       let(:agent) do
-        Agent.new(:title => "007")
+        Agent.new(title: "007")
       end
 
       let(:game) do
-        Game.new(:name => "Donkey Kong")
+        Game.new(name: "Donkey Kong")
       end
 
       before do
@@ -716,7 +716,7 @@ describe Mongoid::Relations::Referenced::In do
     end
 
     let(:metadata) do
-      stub(:extension? => false)
+      stub(extension?: false)
     end
 
     it "returns the embedded in builder" do
@@ -742,7 +742,7 @@ describe Mongoid::Relations::Referenced::In do
       end
 
       let!(:post) do
-        person.posts.create(:title => "testing")
+        person.posts.create(title: "testing")
       end
 
       let(:metadata) do
@@ -804,7 +804,7 @@ describe Mongoid::Relations::Referenced::In do
     end
 
     let(:game) do
-      person.build_game(:name => "Tron")
+      person.build_game(name: "Tron")
     end
 
     let(:document) do
@@ -848,11 +848,11 @@ describe Mongoid::Relations::Referenced::In do
   context "when the relation is self referencing" do
 
     let(:game_one) do
-      Game.new(:name => "Diablo")
+      Game.new(name: "Diablo")
     end
 
     let(:game_two) do
-      Game.new(:name => "Warcraft")
+      Game.new(name: "Warcraft")
     end
 
     context "when setting the parent" do
@@ -876,18 +876,18 @@ describe Mongoid::Relations::Referenced::In do
     before do
       class A
         include Mongoid::Document
-        has_many :bs, :inverse_of => :a
+        has_many :bs, inverse_of: :a
       end
 
       class B
         include Mongoid::Document
-        belongs_to :a, :inverse_of => :bs
-        belongs_to :c, :inverse_of => :b
+        belongs_to :a, inverse_of: :bs
+        belongs_to :c, inverse_of: :b
       end
 
       class C
         include Mongoid::Document
-        has_one :b, :inverse_of => :c
+        has_one :b, inverse_of: :c
       end
     end
 
@@ -942,11 +942,11 @@ describe Mongoid::Relations::Referenced::In do
     end
 
     let!(:post) do
-      Post.create(:title => "test")
+      Post.create(title: "test")
     end
 
     let!(:game) do
-      person.create_game(:name => "Tron")
+      person.create_game(name: "Tron")
     end
 
     before do
@@ -998,17 +998,17 @@ describe Mongoid::Relations::Referenced::In do
   context "when the document belongs to a has one and has many" do
 
     let(:movie) do
-      Movie.create(:name => "Infernal Affairs")
+      Movie.create(name: "Infernal Affairs")
     end
 
     let(:account) do
-      Account.create(:name => "Leung")
+      Account.create(name: "Leung")
     end
 
     context "when creating the document" do
 
       let(:comment) do
-        Comment.create(:movie => movie, :account => account)
+        Comment.create(movie: movie, account: account)
       end
 
       it "sets the correct has one" do
@@ -1028,11 +1028,11 @@ describe Mongoid::Relations::Referenced::In do
     end
 
     let!(:person_two) do
-      Person.create(:title => "Sir")
+      Person.create(title: "Sir")
     end
 
     let!(:game) do
-      Game.create(:name => "Starcraft 2")
+      Game.create(name: "Starcraft 2")
     end
 
     before do
@@ -1043,9 +1043,8 @@ describe Mongoid::Relations::Referenced::In do
     context "when the relation references the same document" do
 
       before do
-        Person.collection.update(
-          { :_id => person_one.id }, { "$set" => { :title => "Madam" }}
-        )
+        Person.collection.find({ _id: person_one.id }).
+          update({ "$set" => { title: "Madam" }})
       end
 
       let(:reloaded) do
@@ -1130,11 +1129,11 @@ describe Mongoid::Relations::Referenced::In do
   context "when creating with a reference to an integer id parent" do
 
     let!(:jar) do
-      Jar.create(:_id => 1)
+      Jar.create(_id: 1)
     end
 
     let(:cookie) do
-      Cookie.create(:jar_id => "1")
+      Cookie.create(jar_id: "1")
     end
 
     it "allows strings to be passed as the id" do

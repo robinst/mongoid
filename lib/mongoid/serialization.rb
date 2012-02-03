@@ -127,7 +127,7 @@ module Mongoid # :nodoc:
       if inclusions.is_a?(Hash)
         inclusions[name]
       else
-        { :except => options[:except], :only => options[:only] }
+        { except: options[:except], only: options[:only] }
       end
     end
   end

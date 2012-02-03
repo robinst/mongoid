@@ -5,7 +5,7 @@ describe Mongoid::Scope do
   describe ".initialize" do
 
     let(:conditions) do
-      {:field => "value"}
+      {field: "value"}
     end
 
     let(:scope) do

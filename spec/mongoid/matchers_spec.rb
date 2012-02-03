@@ -7,17 +7,17 @@ describe Mongoid::Matchers do
     context "when document is embeded" do
 
       let(:document) do
-        Address.new(:street => "Clarkenwell Road")
+        Address.new(street: "Clarkenwell Road")
       end
 
       before do
-        document.locations << Location.new(:name => 'No.1', :info => { 'door' => 'Red'} )
+        document.locations << Location.new(name: 'No.1', info: { 'door' => 'Red'} )
       end
 
       context "when the attributes do not match" do
 
         let(:selector) do
-          { :name => { "$in" => ["No.2"], "$ne" => nil } }
+          { name: { "$in" => ["No.2"], "$ne" => nil } }
         end
 
         it "returns false" do
@@ -27,7 +27,7 @@ describe Mongoid::Matchers do
         context "when just change the selector order" do
 
           let(:selector) do
-            { :name => { "$ne" => nil, "$in" => ["No.2"] } }
+            { name: { "$ne" => nil, "$in" => ["No.2"] } }
           end
 
           it "returns false " do
@@ -76,13 +76,13 @@ describe Mongoid::Matchers do
     context "when performing simple matching" do
 
       let(:document) do
-        Address.new(:street => "Clarkenwell Road")
+        Address.new(street: "Clarkenwell Road")
       end
 
       context "when the attributes match" do
 
         let(:selector) do
-          { :street => "Clarkenwell Road" }
+          { street: "Clarkenwell Road" }
         end
 
         it "returns true" do
@@ -93,7 +93,7 @@ describe Mongoid::Matchers do
       context "when the attributes dont match" do
 
         let(:selector) do
-          { :street => "Broadway Ave" }
+          { street: "Broadway Ave" }
         end
 
         it "returns false" do
@@ -106,9 +106,9 @@ describe Mongoid::Matchers do
 
       let(:document) do
         Address.new(
-          :services => ["first", "second", "third"],
-          :number => 100,
-          :map => { :key => "value" }
+          services: ["first", "second", "third"],
+          number: 100,
+          map: { key: "value" }
         )
       end
 
@@ -117,7 +117,7 @@ describe Mongoid::Matchers do
         context "when the attribute includes all of the values" do
 
           let(:selector) do
-            { :services => { "$all" => [ "first", "second" ] } }
+            { services: { "$all" => [ "first", "second" ] } }
           end
 
           it "returns true" do
@@ -128,7 +128,7 @@ describe Mongoid::Matchers do
         context "when the attributes doesn't include all of the values" do
 
           let(:selector) do
-            { :services => { "$all" => [ "second", "third", "fourth" ] } }
+            { services: { "$all" => [ "second", "third", "fourth" ] } }
           end
 
           it "returns false" do
@@ -142,7 +142,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :services => { "$exists" => true } }
+            { services: { "$exists" => true } }
           end
 
           it "returns true" do
@@ -153,7 +153,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :services => { "$exists" => false } }
+            { services: { "$exists" => false } }
           end
 
           it "returns false" do
@@ -167,7 +167,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$gt" => 50 } }
+            { number: { "$gt" => 50 } }
           end
 
           it "returns true" do
@@ -178,7 +178,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$gt" => 200 } }
+            { number: { "$gt" => 200 } }
           end
 
           it "returns false" do
@@ -192,7 +192,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$gte" => 100 } }
+            { number: { "$gte" => 100 } }
           end
 
           it "returns true" do
@@ -203,7 +203,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$gte" => 200 } }
+            { number: { "$gte" => 200 } }
           end
 
           it "returns false" do
@@ -217,7 +217,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :services => { "$in" => [ /\Afir.*\z/, "second" ] } }
+            { services: { "$in" => [ /\Afir.*\z/, "second" ] } }
           end
 
           it "returns true" do
@@ -228,7 +228,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$in" => [ "none" ] } }
+            { number: { "$in" => [ "none" ] } }
           end
 
           it "returns false" do
@@ -242,7 +242,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$in" => [ 100, 200 ] } }
+            { number: { "$in" => [ 100, 200 ] } }
           end
 
           it "returns true" do
@@ -253,7 +253,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$in" => [ 200, 300 ] } }
+            { number: { "$in" => [ 200, 300 ] } }
           end
 
           it "returns false" do
@@ -267,7 +267,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$lt" => 200 } }
+            { number: { "$lt" => 200 } }
           end
 
           it "returns true" do
@@ -278,7 +278,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$lt" => 50 } }
+            { number: { "$lt" => 50 } }
           end
 
           it "returns false" do
@@ -292,7 +292,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$lte" => 200 } }
+            { number: { "$lte" => 200 } }
           end
 
           it "returns true" do
@@ -303,7 +303,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$lte" => 50 } }
+            { number: { "$lte" => 50 } }
           end
 
           it "returns false" do
@@ -317,7 +317,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$ne" => 200 } }
+            { number: { "$ne" => 200 } }
           end
 
           it "returns true" do
@@ -328,7 +328,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$ne" => 100 } }
+            { number: { "$ne" => 100 } }
           end
 
           it "returns false" do
@@ -342,7 +342,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :services => { "$nin" => [ "none" ] } }
+            { services: { "$nin" => [ "none" ] } }
           end
 
           it "returns true" do
@@ -353,7 +353,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :services => { "$nin" => [ "first" ] } }
+            { services: { "$nin" => [ "first" ] } }
           end
 
           it "returns false" do
@@ -367,7 +367,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :number => { "$nin" => [ 1, 2, 3 ] } }
+            { number: { "$nin" => [ 1, 2, 3 ] } }
           end
 
           it "returns true" do
@@ -378,7 +378,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :number => { "$nin" => [ 100 ] } }
+            { number: { "$nin" => [ 100 ] } }
           end
 
           it "returns false" do
@@ -392,7 +392,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { "$or" => [ { :number => 10 }, { :number => { "$gt" => 99 } } ] }
+            { "$or" => [ { number: 10 }, { number: { "$gt" => 99 } } ] }
           end
 
           it "returns true" do
@@ -403,7 +403,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { "$or" => [ { :number => 10 }, { :number => { "$lt" => 99 } } ] }
+            { "$or" => [ { number: 10 }, { number: { "$lt" => 99 } } ] }
           end
 
           it "returns false" do
@@ -417,7 +417,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :services => { "$size" => 3 } }
+            { services: { "$size" => 3 } }
           end
 
           it "returns true" do
@@ -428,7 +428,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :services => { "$size" => 5 } }
+            { services: { "$size" => 5 } }
           end
 
           it "returns false" do
@@ -442,7 +442,7 @@ describe Mongoid::Matchers do
         context "when the attributes match" do
 
           let(:selector) do
-            { :map => { :key => "value" } }
+            { map: { key: "value" } }
           end
 
           it "returns true" do
@@ -453,7 +453,7 @@ describe Mongoid::Matchers do
         context "when the attributes do not match" do
 
           let(:selector) do
-            { :map => { :key => "value2" } }
+            { map: { key: "value2" } }
           end
 
           it "returns false" do

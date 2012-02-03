@@ -9,7 +9,7 @@ describe Mongoid::DefaultScope do
     end
 
     it "applies the scope to any criteria" do
-      criteria.options.should eq({ :sort => [[ :name, :asc ]] })
+      criteria.options.should eq({ sort: [[ :name, :asc ]] })
     end
 
     context "when combining with a named scope" do
@@ -19,7 +19,7 @@ describe Mongoid::DefaultScope do
       end
 
       it "applies the default scope" do
-        scoped.options.should eq({ :sort => [[ :name, :asc ]] })
+        scoped.options.should eq({ sort: [[ :name, :asc ]] })
       end
     end
 
@@ -60,15 +60,15 @@ describe Mongoid::DefaultScope do
   context "when providing a default scope on root documents" do
 
     let!(:fir) do
-      Tree.create(:name => "Fir",   :evergreen => true )
+      Tree.create(name: "Fir",   evergreen: true )
     end
 
     let!(:pine) do
-      Tree.create(:name => "Pine",  :evergreen => true )
+      Tree.create(name: "Pine",  evergreen: true )
     end
 
     let!(:birch) do
-      Tree.create(:name => "Birch", :evergreen => false)
+      Tree.create(name: "Birch", evergreen: false)
     end
 
     it "returns them in the correct order" do
@@ -87,11 +87,11 @@ describe Mongoid::DefaultScope do
     end
 
     let!(:tron) do
-      person.videos.create(:title => "Tron")
+      person.videos.create(title: "Tron")
     end
 
     let!(:bladerunner) do
-      person.videos.create(:title => "Bladerunner")
+      person.videos.create(title: "Bladerunner")
     end
 
     it "respects the default scope" do

@@ -7,17 +7,17 @@ describe Mongoid::Criterion::Inspection do
     context "when documents match in the database" do
 
       let(:criteria) do
-        Person.where(:age.gt => 10, :title => "Sir").limit(1)
+        Person.where(:age.gt => 10, title: "Sir")
       end
 
       let!(:person) do
-        Person.create(:age => 20, :title => "Sir")
+        Person.create(age: 20, title: "Sir")
       end
 
       let(:inspection) do
         "#<Mongoid::Criteria\n" <<
         "  selector: {:age=>{\"$gt\"=>10}, :title=>\"Sir\"},\n" <<
-        "  options:  {:limit=>1},\n" <<
+        "  options:  {},\n" <<
         "  class:    Person,\n" <<
         "  embedded: false>\n"
       end
@@ -30,7 +30,7 @@ describe Mongoid::Criterion::Inspection do
     context "when no documents match in the database" do
 
       let(:criteria) do
-        Person.where(:age.gt => 10, :title => "Sir")
+        Person.where(:age.gt => 10, title: "Sir")
       end
 
       let(:inspection) do

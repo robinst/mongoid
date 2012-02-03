@@ -46,13 +46,15 @@ describe Mongoid::Attributes do
     context "when the document is an existing record" do
 
       let!(:person) do
-        Person.create
+        Person.create(title: "sir")
       end
 
       context "when the attribute does not exist" do
 
         before do
-          person.collection.update({:_id => person.id}, {'$unset' => {:age => 1}})
+          person.collection
+            .find({ _id: person.id })
+            .update({ "$unset" => { age: 1 }})
         end
 
         context "when found" do
@@ -116,7 +118,7 @@ describe Mongoid::Attributes do
     context "when the field is not _id" do
 
       let(:account) do
-        Account.new(:number => 999999)
+        Account.new(number: 999999)
       end
 
       it "prevents setting via mass assignment" do
@@ -127,7 +129,7 @@ describe Mongoid::Attributes do
     context "when the field is _id" do
 
       let(:account) do
-        Account.new(:_id => "ABBA")
+        Account.new(_id: "ABBA")
       end
 
       it "prevents setting via mass assignment" do
@@ -152,7 +154,7 @@ describe Mongoid::Attributes do
       end
 
       it "ignores any protected attribute" do
-        account.write_attributes({:balance => "ABBA"}, false)
+        account.write_attributes({balance: "ABBA"}, false)
         account.balance.should eq("ABBA")
       end
     end
@@ -163,9 +165,9 @@ describe Mongoid::Attributes do
 
         let(:article) do
           Article.new(
-            :title => "Some Title",
-            :is_rss => true,
-            :user_login => "SomeLogin"
+            title: "Some Title",
+            is_rss: true,
+            user_login: "SomeLogin"
           )
         end
 
@@ -186,10 +188,10 @@ describe Mongoid::Attributes do
 
         let(:article) do
           Article.new({
-            :title => "Some Title",
-            :is_rss => true,
-            :user_login => "SomeLogin"
-            }, :as => :parser
+            title: "Some Title",
+            is_rss: true,
+            user_login: "SomeLogin"
+            }, as: :parser
           )
         end
 
@@ -210,10 +212,10 @@ describe Mongoid::Attributes do
 
         let(:article) do
           Article.new(
-            { :title => "Some Title",
-              :is_rss => true,
-              :user_login => "SomeLogin"
-            }, :without_protection => true
+            { title: "Some Title",
+              is_rss: true,
+              user_login: "SomeLogin"
+            }, without_protection: true
           )
         end
 
@@ -237,7 +239,7 @@ describe Mongoid::Attributes do
     context "when the field is not _id" do
 
       let(:person) do
-        Person.new(:security_code => "ABBA")
+        Person.new(security_code: "ABBA")
       end
 
       it "prevents setting via mass assignment" do
@@ -248,7 +250,7 @@ describe Mongoid::Attributes do
     context "when the field is _id" do
 
       let(:game) do
-        Game.new(:_id => "ABBA")
+        Game.new(_id: "ABBA")
       end
 
       it "prevents setting via mass assignment" do
@@ -274,7 +276,7 @@ describe Mongoid::Attributes do
       end
 
       it "ignores any protected attribute" do
-        person.write_attributes({:security_code => "ABBA"}, false)
+        person.write_attributes({security_code: "ABBA"}, false)
         person.security_code.should eq("ABBA")
       end
     end
@@ -289,9 +291,9 @@ describe Mongoid::Attributes do
 
         before do
           item.assign_attributes(
-            :title => "Some Title",
-            :is_rss => true,
-            :user_login => "SomeLogin"
+            title: "Some Title",
+            is_rss: true,
+            user_login: "SomeLogin"
           )
         end
 
@@ -312,9 +314,9 @@ describe Mongoid::Attributes do
 
         before do
           item.assign_attributes(
-            { :title => "Some Title",
-              :is_rss => true,
-              :user_login => "SomeLogin" }, :as => :parser
+            { title: "Some Title",
+              is_rss: true,
+              user_login: "SomeLogin" }, as: :parser
           )
         end
 
@@ -335,10 +337,10 @@ describe Mongoid::Attributes do
 
         before do
           item.assign_attributes(
-            { :title => "Some Title",
-              :is_rss => true,
-              :user_login => "SomeLogin"
-            }, :without_protection => true
+            { title: "Some Title",
+              is_rss: true,
+              user_login: "SomeLogin"
+            }, without_protection: true
           )
         end
 
@@ -522,7 +524,7 @@ describe Mongoid::Attributes do
   describe "#method_missing" do
 
     let(:attributes) do
-      { :testing => "Testing" }
+      { testing: "Testing" }
     end
 
     let(:person) do
@@ -555,7 +557,7 @@ describe Mongoid::Attributes do
     context "when passing non accessible fields" do
 
       let(:person) do
-        Person.new(:owner_id => 6)
+        Person.new(owner_id: 6)
       end
 
       it "does not set the value" do
@@ -567,9 +569,9 @@ describe Mongoid::Attributes do
 
       let(:attributes) do
         {
-          :nofieldstring => "Testing",
-          :nofieldint => 5,
-          :employer => Employer.new
+          nofieldstring: "Testing",
+          nofieldint: 5,
+          employer: Employer.new
         }
       end
 
@@ -601,7 +603,7 @@ describe Mongoid::Attributes do
       context "when not allowing dynamic fields" do
 
         let!(:attributes) do
-          { :nofieldstring => "Testing" }
+          { nofieldstring: "Testing" }
         end
 
         before do
@@ -615,7 +617,7 @@ describe Mongoid::Attributes do
 
         it "raises an unknown attribute error" do
           expect {
-            Person.new({ :anothernew => "Test" })
+            Person.new({ anothernew: "Test" })
           }.to raise_error(Mongoid::Errors::UnknownAttribute)
         end
       end
@@ -629,17 +631,17 @@ describe Mongoid::Attributes do
 
       let!(:attributes) do
         {
-          :_id => bson_id,
-          :title => "value",
-          :age => "30",
-          :terms => "true",
-          :score => "",
-          :name => {
-            :_id => "2", :first_name => "Test", :last_name => "User"
+          _id: bson_id,
+          title: "value",
+          age: "30",
+          terms: "true",
+          score: "",
+          name: {
+            _id: "2", first_name: "Test", last_name: "User"
           },
-          :addresses => [
-            { :_id => "3", :street => "First Street" },
-            { :_id => "4", :street => "Second Street" }
+          addresses: [
+            { _id: "3", street: "First Street" },
+            { _id: "4", street: "Second Street" }
           ]
         }
       end
@@ -670,11 +672,11 @@ describe Mongoid::Attributes do
       context "when association is a has_one" do
 
         let(:name) do
-          Name.new(:first_name => "Testy")
+          Name.new(first_name: "Testy")
         end
 
         let(:attributes) do
-          { :name => name }
+          { name: name }
         end
 
         let(:person) do
@@ -689,11 +691,11 @@ describe Mongoid::Attributes do
       context "when association is a references_one" do
 
         let(:game) do
-          Game.new(:score => 100)
+          Game.new(score: 100)
         end
 
         let(:attributes) do
-          { :game => game }
+          { game: game }
         end
 
         let!(:person) do
@@ -716,7 +718,7 @@ describe Mongoid::Attributes do
         end
 
         let(:name) do
-          Name.new(:first_name => "Tyler", :person => person)
+          Name.new(first_name: "Tyler", person: person)
         end
 
         it "sets the association" do
@@ -732,7 +734,7 @@ describe Mongoid::Attributes do
       end
 
       let(:attributes) do
-        { :employer_id => employer.id, :title => "Sir" }
+        { employer_id: employer.id, title: "Sir" }
       end
 
       let(:person) do
@@ -747,7 +749,7 @@ describe Mongoid::Attributes do
     context "when an empty array is provided in the attributes" do
 
       let(:attributes) do
-        { :aliases => [] }
+        { aliases: [] }
       end
 
       let(:person) do
@@ -762,7 +764,7 @@ describe Mongoid::Attributes do
     context "when an empty hash is provided in the attributes" do
 
       let(:attributes) do
-        { :map => {} }
+        { map: {} }
       end
 
       let(:person) do
@@ -778,11 +780,11 @@ describe Mongoid::Attributes do
   context "updating when attributes already exist" do
 
     let(:person) do
-      Person.new(:title => "Sir")
+      Person.new(title: "Sir")
     end
 
     let(:attributes) do
-      { :dob => "2000-01-01" }
+      { dob: "2000-01-01" }
     end
 
     before do
@@ -832,7 +834,9 @@ describe Mongoid::Attributes do
       context "when the attribute does not exist" do
 
         before do
-          person.collection.update({:_id => person.id}, {'$unset' => {:age => 1}})
+          person.collection
+            .find({ _id: person.id })
+            .update({ "$unset" => { age: 1 }})
           Mongoid.raise_not_found_error = false
           person.reload
           Mongoid.raise_not_found_error = true
@@ -879,7 +883,9 @@ describe Mongoid::Attributes do
       context "when the attribute does not exist" do
 
         before do
-          person.collection.update({:_id => person.id}, {'$unset' => {:age => 1}})
+          person.collection
+            .find({ _id: person.id })
+            .update({ "$unset" => { age: 1 }})
           Mongoid.raise_not_found_error = false
           person.reload
           Mongoid.raise_not_found_error = true
@@ -916,7 +922,7 @@ describe Mongoid::Attributes do
 
     context "when the value is blank string" do
       let(:person) do
-        Person.new(:title => '')
+        Person.new(title: '')
       end
 
       it "return false" do
@@ -961,7 +967,7 @@ describe Mongoid::Attributes do
     context "when the attribute exists" do
 
       it "removes the attribute" do
-        person = Person.new(:title => "Sir")
+        person = Person.new(title: "Sir")
         person.remove_attribute(:title)
         person.title.should be_nil
       end
@@ -1078,7 +1084,7 @@ describe Mongoid::Attributes do
     context "when setting the attribute to nil" do
 
       let(:person) do
-        Person.new(:age => nil)
+        Person.new(age: nil)
       end
 
       it "does not use the default value" do
@@ -1153,7 +1159,7 @@ describe Mongoid::Attributes do
         end
 
         before do
-          person.send(method, { :videos => [{:title => "Fight Club"}] })
+          person.send(method, { videos: [{title: "Fight Club"}] })
         end
 
         it "sets nested documents" do
@@ -1168,7 +1174,7 @@ describe Mongoid::Attributes do
         end
 
         let(:attributes) do
-          { :age => "50" }
+          { age: "50" }
         end
 
         context "when passing a hash" do
@@ -1199,21 +1205,21 @@ describe Mongoid::Attributes do
         context "when the parent has a has many through a has one" do
 
           let(:owner) do
-            PetOwner.new(:title => "Mr")
+            PetOwner.new(title: "Mr")
           end
 
           let(:pet) do
-            Pet.new(:name => "Fido")
+            Pet.new(name: "Fido")
           end
 
           let(:vet_visit) do
-            VetVisit.new(:date => Date.today)
+            VetVisit.new(date: Date.today)
           end
 
           before do
             owner.pet = pet
             pet.vet_visits = [ vet_visit ]
-            owner.send(method, { :pet => { :name => "Bingo" } })
+            owner.send(method, { pet: { name: "Bingo" } })
           end
 
           it "does not overwrite child attributes if not in the hash" do
@@ -1229,7 +1235,7 @@ describe Mongoid::Attributes do
           end
 
           let(:attributes) do
-            { :services => [] }
+            { services: [] }
           end
 
           it "does not raise an error" do
@@ -1243,16 +1249,16 @@ describe Mongoid::Attributes do
         context "when child is part of a has one" do
 
           let(:person) do
-            Person.new(:title => "Sir", :age => 30)
+            Person.new(title: "Sir", age: 30)
           end
 
           let(:name) do
-            Name.new(:first_name => "Test", :last_name => "User")
+            Name.new(first_name: "Test", last_name: "User")
           end
 
           before do
             person.name = name
-            name.send(method, :first_name => "Test2", :last_name => "User2")
+            name.send(method, first_name: "Test2", last_name: "User2")
           end
 
           it "sets the child attributes on the parent" do
@@ -1265,11 +1271,11 @@ describe Mongoid::Attributes do
         context "when child is part of a has many" do
 
           let(:person) do
-            Person.new(:title => "Sir")
+            Person.new(title: "Sir")
           end
 
           let(:address) do
-            Address.new(:street => "Test")
+            Address.new(street: "Test")
           end
 
           before do
@@ -1369,7 +1375,7 @@ describe Mongoid::Attributes do
   context "when persisting nil attributes" do
 
     let!(:person) do
-      Person.create(:score => nil)
+      Person.create(score: nil)
     end
 
     it "has an entry in the attributes" do
@@ -1405,7 +1411,7 @@ describe Mongoid::Attributes do
       context "when the value is not nil" do
 
         let!(:person) do
-          Person.create(:age => 50)
+          Person.create(age: 50)
         end
 
         let(:from_db) do
@@ -1420,7 +1426,7 @@ describe Mongoid::Attributes do
       context "when the value is explicitly nil" do
 
         let!(:person) do
-          Person.create(:age => nil)
+          Person.create(age: nil)
         end
 
         let(:from_db) do
@@ -1435,7 +1441,7 @@ describe Mongoid::Attributes do
       context "when the default is a proc" do
 
         let!(:account) do
-          Account.create(:name => "savings", :balance => "100")
+          Account.create(name: "savings", balance: "100")
         end
 
         let(:from_db) do

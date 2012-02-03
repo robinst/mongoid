@@ -13,9 +13,9 @@ module Mongoid #:nodoc
           compose_message(
             "invalid_type",
             {
-              :klass => klass.name,
-              :other => value.class.name,
-              :value => value.inspect
+              klass: klass.name,
+              other: value.class.name,
+              value: value.inspect
             }
           )
         )

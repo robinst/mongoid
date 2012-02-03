@@ -15,7 +15,7 @@ describe Mongoid::Persistence::Operations do
   describe "#collection" do
 
     let(:options) do
-      { :validate => true }
+      { validate: true }
     end
 
     context "when the document is a root" do
@@ -29,14 +29,14 @@ describe Mongoid::Persistence::Operations do
       end
 
       it "returns the root collection" do
-        collection.should eq(document.collection)
+        collection.name.should eq(document.collection.name)
       end
     end
 
     context "when the document is embedded" do
 
       let(:name) do
-        document.build_name(:first_name => "Syd")
+        document.build_name(first_name: "Syd")
       end
 
       let(:operation) do
@@ -48,7 +48,7 @@ describe Mongoid::Persistence::Operations do
       end
 
       it "returns the root collection" do
-        collection.should eq(document.collection)
+        collection.name.should eq(document.collection.name)
       end
     end
   end
@@ -58,7 +58,7 @@ describe Mongoid::Persistence::Operations do
     context "when the child is an embeds one" do
 
       let(:child) do
-        document.build_name(:first_name => "Syd")
+        document.build_name(first_name: "Syd")
       end
 
       let(:operation) do
@@ -79,7 +79,7 @@ describe Mongoid::Persistence::Operations do
     context "when the child is an embeds many" do
 
       let(:child) do
-        document.addresses.build(:street => "Unter den Linden")
+        document.addresses.build(street: "Unter den Linden")
       end
 
       let(:operation) do
@@ -101,7 +101,7 @@ describe Mongoid::Persistence::Operations do
   describe "#inserts" do
 
     let(:child) do
-      document.build_name(:first_name => "Syd")
+      document.build_name(first_name: "Syd")
     end
 
     let(:operation) do
@@ -128,7 +128,7 @@ describe Mongoid::Persistence::Operations do
     context "when the suppress option is true" do
 
       let(:options) do
-        { :suppress => true }
+        { suppress: true }
       end
 
       it "returns false" do
@@ -139,7 +139,7 @@ describe Mongoid::Persistence::Operations do
     context "when the suppress option is false" do
 
       let(:options) do
-        { :suppress => false }
+        { suppress: false }
       end
 
       it "returns true" do
@@ -161,97 +161,23 @@ describe Mongoid::Persistence::Operations do
 
   describe "#options" do
 
+    let(:options) do
+      {}
+    end
+
     let(:operation) do
       klass.new(document, options)
     end
 
-    context "safe is true" do
-
-      let(:options) do
-        { :safe => true }
-      end
-
-      let(:opts) do
-        operation.options
-      end
-
-      it "returns the safe options" do
-        opts.should eq(options)
-      end
-    end
-
-    context "when safe is a hash" do
-
-      let(:options) do
-        { :safe => { :w => 2 } }
-      end
-
-      let(:opts) do
-        operation.options
-      end
-
-      it "returns the safe options" do
-        opts.should eq(options)
-      end
-    end
-
-    context "when safe is false" do
-
-      let(:options) do
-        { :safe => false }
-      end
-
-      let(:opts) do
-        operation.options
-      end
-
-      it "returns the safe options" do
-        opts.should eq(options)
-      end
-    end
-
-    context "when safe is nil" do
-
-      let(:options) do
-        {}
-      end
-
-      let(:opts) do
-        operation.options
-      end
-
-      context "when persisting in safe mode" do
-
-        before do
-          Mongoid.persist_in_safe_mode = true
-        end
-
-        after do
-          Mongoid.persist_in_safe_mode = false
-        end
-
-        it "returns :safe => true" do
-          opts.should eq({ :safe => true })
-        end
-      end
-
-      context "when not persisting in safe mode" do
-
-        before do
-          Mongoid.persist_in_safe_mode = false
-        end
-
-        it "returns :safe => false" do
-          opts.should eq({ :safe => false })
-        end
-      end
+    it "returns the options" do
+      operation.options.should eq(options)
     end
   end
 
   describe "#parent" do
 
     let(:child) do
-      document.addresses.build(:street => "Unter den Linden")
+      document.addresses.build(street: "Unter den Linden")
     end
 
     let(:operation) do
@@ -301,13 +227,13 @@ describe Mongoid::Persistence::Operations do
       end
 
       let!(:child) do
-        document.addresses.build(:street => "Unter den Linden").tap do |doc|
+        document.addresses.build(street: "Unter den Linden").tap do |doc|
           doc.new_record = false
         end
       end
 
       let!(:conflict) do
-        document.addresses.build(:street => "Freiderichstr")
+        document.addresses.build(street: "Freiderichstr")
       end
 
       let(:operation) do
@@ -354,7 +280,7 @@ describe Mongoid::Persistence::Operations do
     context "when validate option is true" do
 
       let(:options) do
-        { :validate => true }
+        { validate: true }
       end
 
       it "returns true" do
@@ -365,7 +291,7 @@ describe Mongoid::Persistence::Operations do
     context "when validate option is false" do
 
       let(:options) do
-        { :validate => false }
+        { validate: false }
       end
 
       it "returns false" do

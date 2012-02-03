@@ -14,7 +14,7 @@ module Mongoid #:nodoc:
     extend ActiveSupport::Concern
 
     included do
-      field :deleted_at, :type => Time
+      field :deleted_at, type: Time
       self.paranoid = true
     end
 
@@ -56,11 +56,8 @@ module Mongoid #:nodoc:
     # @since 1.0.0
     def remove(options = {})
       time = self.deleted_at = Time.now
-      paranoid_collection.update(
-        atomic_selector,
-        { "$set" => { paranoid_field => time }},
-        Safety.merge_safety_options(options)
-      )
+      paranoid_collection.find(atomic_selector).
+        update({ "$set" => { paranoid_field => time }})
       cascade!
       @destroyed = true
       IdentityMap.remove(self)
@@ -91,10 +88,8 @@ module Mongoid #:nodoc:
     #
     # @since 1.0.0
     def restore
-      paranoid_collection.update(
-        atomic_selector,
-        { "$unset" => { paranoid_field => true }}
-      )
+      paranoid_collection.find(atomic_selector).
+        update({ "$unset" => { paranoid_field => true }})
       attributes.delete("deleted_at")
     end
 
@@ -138,7 +133,7 @@ module Mongoid #:nodoc:
       #
       # @since 1.0.0
       def criteria(embedded = false, scoped = true)
-        scoped ? super.where(:deleted_at => nil) : super
+        scoped ? super.where(deleted_at: nil) : super
       end
 
       # Find deleted documents

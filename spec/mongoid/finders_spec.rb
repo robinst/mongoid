@@ -5,33 +5,33 @@ describe Mongoid::Finders do
   describe ".all_in" do
 
     let(:criteria) do
-      Person.all_in(:aliases => [ "Bond", "007" ])
+      Person.all_in(aliases: [ "Bond", "007" ])
     end
 
     it "returns a new criteria with select conditions added" do
-      criteria.selector.should eq({ :aliases => { "$all" => [ "Bond", "007" ] } })
+      criteria.selector.should eq({ aliases: { "$all" => [ "Bond", "007" ] } })
     end
   end
 
   describe ".any_in" do
 
     let(:criteria) do
-      Person.any_in(:aliases => [ "Bond", "007" ])
+      Person.any_in(aliases: [ "Bond", "007" ])
     end
 
     it "returns a new criteria with select conditions added" do
-      criteria.selector.should eq({ :aliases => { "$in" => [ "Bond", "007" ] } })
+      criteria.selector.should eq({ aliases: { "$in" => [ "Bond", "007" ] } })
     end
   end
 
   describe ".excludes" do
 
     let(:criteria) do
-      Person.excludes(:title => "Sir")
+      Person.excludes(title: "Sir")
     end
 
     it "returns a new criteria with select conditions added" do
-      criteria.selector.should eq({ :title => { "$ne" => "Sir" } })
+      criteria.selector.should eq({ title: { "$ne" => "Sir" } })
     end
   end
 
@@ -55,7 +55,7 @@ describe Mongoid::Finders do
       context "when passed a string" do
 
         let!(:person) do
-          Person.create(:_id => 1)
+          Person.create(_id: 1)
         end
 
         let(:from_db) do
@@ -70,7 +70,7 @@ describe Mongoid::Finders do
       context "when passed an array of strings" do
 
         let!(:person) do
-          Person.create(:_id => 2)
+          Person.create(_id: 2)
         end
 
         let(:from_db) do
@@ -86,12 +86,12 @@ describe Mongoid::Finders do
     context "when using string ids" do
 
       let!(:person) do
-        Person.create(:title => "Mrs.")
+        Person.create(title: "Mrs.")
       end
 
       let!(:documents) do
         3.times.map do |n|
-          Person.create(:title => "Mr.")
+          Person.create(title: "Mr.")
         end
       end
 
@@ -217,12 +217,12 @@ describe Mongoid::Finders do
     context "when using object ids" do
 
       let!(:person) do
-        Person.create(:title => "Mrs.")
+        Person.create(title: "Mrs.")
       end
 
       let!(:documents) do
         3.times.map do |n|
-          Person.create(:title => "Mr.")
+          Person.create(title: "Mr.")
         end
       end
 
@@ -305,11 +305,11 @@ describe Mongoid::Finders do
     context "when the document is found" do
 
       let!(:person) do
-        Person.create(:title => "Senior")
+        Person.create(title: "Senior")
       end
 
       it "returns the document" do
-        Person.find_or_create_by(:title => "Senior").should eq(person)
+        Person.find_or_create_by(title: "Senior").should eq(person)
       end
     end
 
@@ -318,7 +318,7 @@ describe Mongoid::Finders do
       context "when not providing a block" do
 
         let!(:person) do
-          Person.find_or_create_by(:title => "Senorita")
+          Person.find_or_create_by(title: "Senorita")
         end
 
         it "creates a persisted document" do
@@ -333,7 +333,7 @@ describe Mongoid::Finders do
       context "when providing a block" do
 
         let!(:person) do
-          Person.find_or_create_by(:title => "Senorita") do |person|
+          Person.find_or_create_by(title: "Senorita") do |person|
             person.pets = true
           end
         end
@@ -358,11 +358,11 @@ describe Mongoid::Finders do
     context "when the document is found" do
 
       let!(:person) do
-        Person.create(:title => "Senior")
+        Person.create(title: "Senior")
       end
 
       it "returns the document" do
-        Person.find_or_initialize_by(:title => "Senior").should eq(person)
+        Person.find_or_initialize_by(title: "Senior").should eq(person)
       end
     end
 
@@ -371,7 +371,7 @@ describe Mongoid::Finders do
       context "when not providing a block" do
 
         let!(:person) do
-          Person.find_or_initialize_by(:title => "Senorita")
+          Person.find_or_initialize_by(title: "Senorita")
         end
 
         it "creates a new document" do
@@ -386,7 +386,7 @@ describe Mongoid::Finders do
       context "when providing a block" do
 
         let!(:person) do
-          Person.find_or_initialize_by(:title => "Senorita") do |person|
+          Person.find_or_initialize_by(title: "Senorita") do |person|
             person.pets = true
           end
         end
@@ -411,11 +411,11 @@ describe Mongoid::Finders do
     context "when the document is found" do
 
       let!(:person) do
-        Person.create(:title => "sir")
+        Person.create(title: "sir")
       end
 
       it "returns the document" do
-        Person.find_by(:title => "sir").should eq(person)
+        Person.find_by(title: "sir").should eq(person)
       end
     end
 
@@ -423,7 +423,7 @@ describe Mongoid::Finders do
 
       it "raises an error" do
         expect {
-          Person.find_by(:ssn => "333-22-1111")
+          Person.find_by(ssn: "333-22-1111")
         }.to raise_error(Mongoid::Errors::DocumentNotFound)
       end
     end
@@ -436,30 +436,30 @@ describe Mongoid::Finders do
     end
 
     it "returns a new criteria with select conditions added" do
-      criteria.options.should eq({ :fields => {:_type => 1, :title => 1, :age => 1} })
+      criteria.options.should eq({ fields: {_type: 1, title: 1, age: 1} })
     end
   end
 
   describe ".where" do
 
     let(:criteria) do
-      Person.where(:title => "Sir")
+      Person.where(title: "Sir")
     end
 
     it "returns a new criteria with select conditions added" do
-      criteria.selector.should eq({ :title => "Sir" })
+      criteria.selector.should eq({ title: "Sir" })
     end
   end
 
   describe ".near" do
 
     let(:criteria) do
-      Address.near(:latlng => [37.761523, -122.423575, 1])
+      Address.near(latlng: [37.761523, -122.423575, 1])
     end
 
     it "returns a new criteria with select conditions added" do
       criteria.selector.should eq(
-        { :latlng => { "$near" => [37.761523, -122.423575, 1] }}
+        { latlng: { "$near" => [37.761523, -122.423575, 1] }}
       )
     end
   end

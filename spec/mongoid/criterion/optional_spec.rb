@@ -179,7 +179,7 @@ describe Mongoid::Criterion::Optional do
     end
   end
 
-  describe "#descending" do
+  pending "#descending" do
 
     let!(:first) do
       Person.create
@@ -331,11 +331,11 @@ describe Mongoid::Criterion::Optional do
       context "when extras are provided" do
 
         let(:criteria) do
-          base.limit(10).extras({ :skip => 10 })
+          base.extras({ skip: 10 })
         end
 
         it "adds the extras to the options" do
-          criteria.options.should eq({ :skip => 10, :limit => 10 })
+          criteria.options.should eq({ skip: 10 })
         end
       end
     end
@@ -380,7 +380,7 @@ describe Mongoid::Criterion::Optional do
           end
 
           it "adds the _id query to the selector" do
-            criteria.selector.should eq({ :_id => id })
+            criteria.selector.should eq({ "_id" => id })
           end
 
           it "returns a copy" do
@@ -399,7 +399,7 @@ describe Mongoid::Criterion::Optional do
           end
 
           it "adds the string _id query to the selector" do
-            criteria.selector.should eq({ :_id => id.to_s })
+            criteria.selector.should eq({ "_id" => id.to_s })
           end
 
           it "returns a copy" do
@@ -419,7 +419,7 @@ describe Mongoid::Criterion::Optional do
         end
 
         it "adds the _id query to the selector" do
-          criteria.selector.should eq({ :_id => { "$in" => ids }})
+          criteria.selector.should eq({ "_id" => { "$in" => ids }})
         end
       end
 
@@ -430,7 +430,7 @@ describe Mongoid::Criterion::Optional do
         end
 
         it "adds the _id query to the selector" do
-          base.for_ids(ids).selector.should eq({ :_id => ids.first.to_s })
+          base.for_ids(ids).selector.should eq({ "_id" => ids.first.to_s })
         end
       end
     end
@@ -459,7 +459,7 @@ describe Mongoid::Criterion::Optional do
           end
 
           it "adds the _id query to the selector convert like BSON::ObjectId" do
-            criteria.selector.should eq({ :_id => BSON::ObjectId(id) })
+            criteria.selector.should eq({ "_id" => BSON::ObjectId.from_string(id) })
           end
 
           it "returns a copy" do
@@ -478,7 +478,7 @@ describe Mongoid::Criterion::Optional do
           end
 
           it "adds the _id query to the selector without cast" do
-            criteria.selector.should eq({ :_id => id })
+            criteria.selector.should eq({ "_id" => id })
           end
 
           it "returns a copy" do
@@ -499,7 +499,7 @@ describe Mongoid::Criterion::Optional do
 
         it "adds the _id query to the selector with all ids like BSON::ObjectId" do
           criteria.selector.should eq(
-            { :_id => { "$in" => ids.map { |i| BSON::ObjectId(i) }}}
+            { "_id" => { "$in" => ids.map { |i| BSON::ObjectId.from_string(i) }}}
           )
         end
       end
@@ -515,7 +515,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the limit to the options" do
-        criteria.options.should eq({ :limit => 100 })
+        criteria.context.query.operation.limit.should eq(100)
       end
     end
 
@@ -526,7 +526,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "defaults to 20" do
-        criteria.options.should eq({ :limit => 20 })
+        criteria.context.query.operation.limit.should eq(20)
       end
     end
 
@@ -540,7 +540,7 @@ describe Mongoid::Criterion::Optional do
     context "when the skip option exists" do
 
       let(:criteria) do
-        base.extras({ :skip => 20 })
+        base.extras({ skip: 20 })
       end
 
       it "returns the skip option" do
@@ -555,14 +555,14 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "delegates to skip" do
-        criteria.options[:skip].should eq(40)
+        criteria.context.query.operation.skip.should eq(40)
       end
     end
 
     context "when no option exists" do
+
       it "returns nil" do
         base.offset.should be_nil
-        base.options[:skip].should be_nil
       end
     end
   end
@@ -613,14 +613,14 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the sort to the options" do
-        criteria.options.should eq({ :sort => [[:title, :asc], [:text, :desc]] })
+        criteria.options.should eq({ sort: [[:title, :asc], [:text, :desc]] })
       end
     end
 
     context "when providing a hash of options" do
 
       let(:criteria) do
-        base.order_by(:title => :asc)
+        base.order_by(title: :asc)
       end
 
       it "adds the sort to the options" do
@@ -631,7 +631,7 @@ describe Mongoid::Criterion::Optional do
     context "when providing a array of hashes of options" do
 
       let(:criteria) do
-        base.order_by({:title => :asc}, {:text => :desc})
+        base.order_by({title: :asc}, {text: :desc})
       end
 
       it "adds the sort to the options" do
@@ -642,7 +642,7 @@ describe Mongoid::Criterion::Optional do
     context "when providing a hash of multiple options" do
 
       let(:criteria) do
-        base.order_by(:title => :asc, :text => :desc)
+        base.order_by(title: :asc, text: :desc)
       end
 
       it "adds the sort to the options" do
@@ -658,7 +658,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the sort to the options" do
-        criteria.options.should eq({ :sort => [[:title, :asc], [:text, :desc]] })
+        criteria.options.should eq({ sort: [[:title, :asc], [:text, :desc]] })
       end
     end
 
@@ -668,7 +668,7 @@ describe Mongoid::Criterion::Optional do
 
     context "when chained" do
       let(:criteria) do
-        base.order_by(:title => :asc).order_by(:text => :desc).order_by(:title.desc)
+        base.order_by(title: :asc).order_by(text: :desc).order_by(:title.desc)
       end
 
       it "merge criterias" do
@@ -687,7 +687,7 @@ describe Mongoid::Criterion::Optional do
     context "when chained with mixed defenitions" do
 
       let(:criteria) do
-        base.order_by(:title => :asc).order_by([ {:text => :desc}, :title.desc ])
+        base.order_by(title: :asc).order_by([ {text: :desc}, :title.desc ])
       end
 
       it "merge criterias" do
@@ -717,7 +717,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the skip value to the options" do
-        criteria.options.should eq({ :skip => 20 })
+        criteria.context.query.operation.skip.should eq(20)
       end
     end
 
@@ -728,7 +728,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "defaults to zero" do
-        criteria.options.should eq({ :skip => 0 })
+        criteria.context.query.operation.skip.should eq(0)
       end
     end
 
@@ -746,7 +746,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the _type query to the selector" do
-        criteria.selector.should eq({ :_type => { '$in' => ['Browser'] } })
+        criteria.selector.should eq({ _type: { '$in' => ['Browser'] } })
       end
 
       it "returns a copy" do
@@ -761,7 +761,7 @@ describe Mongoid::Criterion::Optional do
       end
 
       it "adds the _type query to the selector" do
-        criteria.selector.should eq({ :_type => { '$in' => ['Browser', 'Firefox'] } })
+        criteria.selector.should eq({ _type: { '$in' => ['Browser', 'Firefox'] } })
       end
 
       it "returns a copy" do
@@ -786,7 +786,7 @@ describe Mongoid::Criterion::Optional do
 
     before do
       titles.each do |name|
-        Book.create(:title => name)
+        Book.create(title: name)
       end
     end
 

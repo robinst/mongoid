@@ -25,9 +25,9 @@ module Mongoid #:nodoc
           compose_message(
             message_key,
             {
-              :klass => klass.name,
-              :identifiers => identifiers,
-              :attributes => identifiers
+              klass: klass.name,
+              identifiers: identifiers,
+              attributes: identifiers
             }
           )
         )

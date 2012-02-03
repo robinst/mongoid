@@ -6,8 +6,7 @@ module Mongoid #:nodoc:
     # proxies.
     class Many < Proxy
 
-      delegate :avg, :max, :min, :sum, :to => :criteria
-      delegate :length, :size, :to => :target
+      delegate :length, :size, to: :target
 
       # Is the relation empty?
       #

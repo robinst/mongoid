@@ -57,7 +57,7 @@ describe Mongoid::Errors::DocumentNotFound do
     context "when providing attributes" do
 
       let(:error) do
-        described_class.new(Person, { :name => "syd" })
+        described_class.new(Person, { name: "syd" })
       end
 
       it "contains the problem in the message" do

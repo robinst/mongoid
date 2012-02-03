@@ -105,7 +105,7 @@ module Mongoid #:nodoc:
     # @since 2.0.0.rc.6
     def update_attribute(name, value)
       write_attribute(name, value)
-      save(:validate => false)
+      save(validate: false)
     end
 
     # Update the document attributes in the datbase.
@@ -216,9 +216,9 @@ module Mongoid #:nodoc:
       def delete_all(conditions = nil)
         conds = conditions || {}
         selector = conds[:conditions] || conds
-        selector.merge!(:_type => name) if hereditary?
+        selector.merge!(_type: name) if hereditary?
         collection.find(selector).count.tap do
-          collection.remove(selector, Safety.merge_safety_options)
+          collection.find(selector).remove_all
           Threaded.clear_options!
         end
       end

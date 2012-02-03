@@ -125,7 +125,7 @@ describe Mongoid::Relations::Macros do
     context 'when defining order on relation' do
 
       before do
-        klass.embeds_many(:addresses, :order => :number.asc)
+        klass.embeds_many(:addresses, order: :number.asc)
       end
 
       let(:metadata) do
@@ -144,7 +144,7 @@ describe Mongoid::Relations::Macros do
     context "when setting validate to false" do
 
       before do
-        klass.embeds_many(:addresses, :validate => false)
+        klass.embeds_many(:addresses, validate: false)
       end
 
       it "does not add associated validations" do
@@ -216,7 +216,7 @@ describe Mongoid::Relations::Macros do
     context "when setting validate to false" do
 
       before do
-        klass.embeds_one(:name, :validate => false)
+        klass.embeds_one(:name, validate: false)
       end
 
       it "does not add associated validations" do
@@ -339,7 +339,7 @@ describe Mongoid::Relations::Macros do
     context 'when defining order on relation' do
 
       before do
-        klass.has_many(:posts, :order => :rating.asc)
+        klass.has_many(:posts, order: :rating.asc)
       end
 
       let(:metadata) do
@@ -358,7 +358,7 @@ describe Mongoid::Relations::Macros do
     context "when setting validate to false" do
 
       before do
-        klass.has_many(:posts, :validate => false)
+        klass.has_many(:posts, validate: false)
       end
 
       it "does not add associated validations" do
@@ -404,7 +404,7 @@ describe Mongoid::Relations::Macros do
       context 'when defining order on relation' do
 
         before do
-          klass.has_and_belongs_to_many(:preferences, :order => :ranking.asc)
+          klass.has_and_belongs_to_many(:preferences, order: :ranking.asc)
         end
 
         let(:metadata) do
@@ -501,7 +501,7 @@ describe Mongoid::Relations::Macros do
     context "when setting validate to false" do
 
       before do
-        klass.has_one(:game, :validate => false)
+        klass.has_one(:game, validate: false)
       end
 
       it "does not add associated validations" do
@@ -567,7 +567,7 @@ describe Mongoid::Relations::Macros do
     end
 
     let(:peep) do
-      Peep.new(:handle => Handle.new)
+      Peep.new(handle: Handle.new)
     end
 
     context "when the extension is a block" do
@@ -588,7 +588,7 @@ describe Mongoid::Relations::Macros do
     context "when the extension is a module" do
 
       before do
-        Peep.embeds_one(:handle, :extend => Handle::Extension)
+        Peep.embeds_one(:handle, extend: Handle::Extension)
       end
 
       it "extends the relation" do

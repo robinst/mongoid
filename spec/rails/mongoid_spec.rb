@@ -16,13 +16,13 @@ describe "Rails::Mongoid" do
 
       before do
         Rails::Mongoid.expects(:determine_model).returns(model)
-        model.expects(:create_indexes).raises(Mongo::MongoArgumentError)
+        model.expects(:create_indexes).raises(Moped::Errors::OperationFailure)
       end
 
       it "is not swallowed" do
         expect {
           Rails::Mongoid.create_indexes("spec/app/models/**/*.rb")
-        }.to raise_error(Mongo::MongoArgumentError)
+        }.to raise_error(Moped::Errors::OperationFailure)
       end
     end
 
@@ -129,11 +129,11 @@ describe "Rails::Mongoid" do
   describe ".preload_models" do
 
     let(:app) do
-      stub(:config => config)
+      stub(config: config)
     end
 
     let(:config) do
-      stub(:paths => paths)
+      stub(paths: paths)
     end
 
     let(:paths) do
@@ -207,11 +207,11 @@ describe "Rails::Mongoid" do
   describe ".load_models" do
 
     let(:app) do
-      stub(:config => config)
+      stub(config: config)
     end
 
     let(:config) do
-      stub(:paths => paths)
+      stub(paths: paths)
     end
 
     let(:paths) do
