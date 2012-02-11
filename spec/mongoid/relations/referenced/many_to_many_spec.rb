@@ -454,6 +454,38 @@ describe Mongoid::Relations::Referenced::ManyToMany do
       end
     end
 
+    context "when there are existing entries" do
+      let(:person) do
+        Person.new
+      end
+
+      let(:preference1) do
+        Preference.create(:name => "one")
+      end
+
+      let(:preference2) do
+        Preference.create(:name => "two")
+      end
+
+      before do
+        person.preference_ids = [preference1.id, preference2.id]
+        person.save
+      end
+
+      context "and the order is changed" do
+
+        before do
+          person.preference_ids = [preference2.id, preference1.id]
+          person.save
+        end
+
+        it "should result in that order when reading back" do
+          p = Person.find(person.id)
+          p.preference_ids.should eq([preference2.id, preference1.id])
+        end
+      end
+    end
+
     context "when the relation is not polymorphic" do
 
       context "when the parent and relation are new records" do
